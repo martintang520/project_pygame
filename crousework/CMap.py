@@ -1,25 +1,18 @@
 import pygame
 from pygame.locals import *
+from CXmladapter import *
 
 class CMap():
 
     listMapGroup = []
     
     def __init__(self):
+        self.XMLreader = CXmladapter('map.xml','map')
         self.InitMap()
         pass
 
     def InitMap(self):
-        CMap.listMapGroup += [[[0, 0, 0, 0, 0, 4, 0, 0, 4, 0, 0, 4, 0, 0, 2],
-                               [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2],
-                               [2, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 1, 0, 2],
-                               [2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 4, 2],
-                               [2, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 2],
-                               [2, 4, 1, 0, 3, 3, 3, 3, 3, 3, 3, 0, 1, 4, 2],
-                               [2, 0, 1, 0, 3, 3, 3, 3, 3, 3, 3, 0, 1, 0, 2],
-                               [2, 4, 1, 0, 0, 4, 0, 0, 0, 4, 0, 0, 1, 4, 2],
-                               [2, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 2],
-                               [2, 0, 0, 0, 4, 0, 0, 4, 0, 0, 4, 0, 0, 0, 2]]]
+        CMap.listMapGroup += [self.XMLreader.Read(0)]
 
 
     def IsBlank(self, mapNumber, index):

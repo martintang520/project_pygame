@@ -7,9 +7,7 @@ class CXmladapter:
 		self.strUrl=strUrl
 		self.strItem=strItem
 
-
-
-	def read(self,nNum):
+	def Read(self,nNum):
 		xmlFile=xml.dom.minidom.parse(self.strUrl)
 		xmlItem=xmlFile.getElementsByTagName(self.strItem)
 		xmlNumItem=xmlItem[nNum]
@@ -17,7 +15,7 @@ class CXmladapter:
 		listItem=ast.literal_eval(strList)
 		return listItem
 
-a=CXmladapter('map.xml','map')
-print a.read(0)
+##a=CXmladapter('map.xml','map')
+##print a.Read(0)
 
 
