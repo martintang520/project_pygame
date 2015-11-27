@@ -36,8 +36,8 @@ class CObjectManager():
 
         return self.index - 1
 
-    def CreateMonsterNode(self, color, pos, size, pirtureName, monsterProperty):
-        newObject = CMonster(color, pos, size, pirtureName, monsterProperty)
+    def CreateMonsterNode(self, color, pos, size, monsterProperty):
+        newObject = CMonster(color, pos, size, monsterProperty)
         self.dictObject[self.index] = newObject
         self.index += 1
 

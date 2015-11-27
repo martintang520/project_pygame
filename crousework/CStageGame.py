@@ -22,9 +22,9 @@ class CStageGame(CStage):
         self.DrawMap();
 
         ##test
-        MonsterTest = StuProperty(1, 20, 5)
+        MonsterTest = StuProperty(1, 20, 5, "picture/monster1.png")
         self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 0),
-                    self.surface.get_size(), "picture/house.png", MonsterTest)
+                          self.surface.get_size(), MonsterTest)
 
     
     def Update(self,deltaTime):
