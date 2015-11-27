@@ -11,6 +11,7 @@ class Ball(pygame.sprite.Sprite):
 
         self.x = 0.
         self.speed = 100
+        self.contro = 0
         
 
 
