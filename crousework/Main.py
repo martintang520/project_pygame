@@ -1,5 +1,4 @@
 import pygame
-from ball import *
 from CGame import *
 SIZE = (960,640)
 

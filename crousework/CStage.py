@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import*
 
 class CStage():
-    nStage = 1  ##Finite State Machine
+    nStage = 2  ##Finite State Machine
     
     def __init__(self):
         pass
