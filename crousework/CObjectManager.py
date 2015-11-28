@@ -3,6 +3,7 @@ from pygame.locals import *
 from CObject import *
 from CButton import *
 from CMonster import *
+from CBullet import *
 
 
 class CObjectManager():
@@ -38,6 +39,13 @@ class CObjectManager():
 
     def CreateMonsterNode(self, color, pos, size, monsterProperty):
         newObject = CMonster(color, pos, size, monsterProperty)
+        self.dictObject[self.index] = newObject
+        self.index += 1
+
+        return self.index - 1
+
+    def CreateBulletNode(self, color, pos, size, pirtureName):
+        newObject = CBullet(color, pos, size, pirtureName)
         self.dictObject[self.index] = newObject
         self.index += 1
 
