@@ -4,6 +4,7 @@ from pygame.locals import*
 from CStageStart import *
 from CStageGame import *
 from CStageSet import *
+from CMusic import *
 
 class CGame():
     nState = 1  ##Finite State Machine
@@ -54,7 +55,11 @@ class CGame():
 
 
     def GameInit(self):
+        self.musicVoice = music("2.mp3")
+        self.musicVoice.play(0)
+        print 1
         CGame.myCStage = CStageStart(self.surface)
+        
         
 
     def GameUpdate(self, deltaTime):
@@ -88,7 +93,7 @@ class CGame():
             elif CGame.nState == 2:
                 CGame.myCStage = CStageGame(self.surface)
             elif CGame.nState == 3:
-                CGame.myCStage = CStageSet(self.surface)
+                CGame.myCStage = CStageSet(self.surface,self.musicVoice)
 
     ##@staticmethod
     ##def SetState(state):

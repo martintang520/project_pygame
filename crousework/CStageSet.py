@@ -6,9 +6,10 @@ from CObjectManager import *
 
 class CStageSet(CStage):
 
-    def __init__(self, surface):
+    def __init__(self, surface,music):
         self.surface = surface
         self.myObjManger = CObjectManager()
+        self.musicVoice = music
 
         self.GameInit()
 
@@ -85,6 +86,16 @@ class CStageSet(CStage):
             self.butSoundClose.SetImage("picture/musicClose2.png")
             self.imageTEXTSound.SetImage("picture/TEXT4.png")
             self.boolMusic=False
+        self.Play()
+
+
+    def Play(self):
+        if self.boolMusic:
+            self.musicVoice.play(0)
+            print 2
+        else:
+            self.musicVoice.pause()
+            print 3
 
 ##turn up or down the Volumn of music
     def VolumnDecision(self,event):
