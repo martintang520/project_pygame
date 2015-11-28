@@ -65,11 +65,13 @@ class CGame():
         self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
-        self.musicVoice = music("2.mp3")
-        self.musicVoice.play(0)
-        self.soundVoice = sound("1.wav")
+        self.MusicInit()
         CGame.myCStage = CStageStart(self.surface)
         
+    def MusicInit(self):
+        self.musicVoice = music("2.mp3")
+        self.soundVoice = sound("1.wav")
+        self.musicVoice.play(0)
         
 
     def GameUpdate(self, deltaTime):

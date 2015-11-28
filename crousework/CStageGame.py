@@ -10,12 +10,10 @@ class CStageGame(CStage):
         self.surface = surface
         self.myGameMap = CMap()
         self.myObjManger = CObjectManager()
-        self.Sound = sound
-        self.boolSound = self.Sound.soundState()
-        print self.boolSound
-        self.Sound.play(1)
-        self.GameInit()
 
+        self.GameInit()
+        self.MusicInit()
+        
     def GameInit(self):
         
         self.nMapNumber = 0
@@ -29,7 +27,11 @@ class CStageGame(CStage):
         self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 0),
                           self.surface.get_size(), MonsterTest)
 
-
+    def MusicInit(self):
+        self.Sound = sound
+        self.boolSound = self.Sound.soundState()
+        self.Sound.play(1)
+        self.nGamePagelevel=0
     
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
@@ -43,7 +45,7 @@ class CStageGame(CStage):
 
         clickPoint =  (event.pos[0] // 64, event.pos[1] // 64)
         if self.myGameMap.IsBlank(self.nMapNumber, clickPoint):
-            self.Bulid()
+            self.Bulid(event)
         elif self.myGameMap.IsTower(self.nMapNumber, clickPoint):
             self.Upgrade()
 
@@ -62,7 +64,10 @@ class CStageGame(CStage):
                     self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
 
-    def Bulid(self):
+    def Bulid(self,event):
+        if self.nGamePagelevel==0:
+            self.nBuild1 = self.myObjManger.CreateButtonNode((0, 0, 0), (self.nVolumn+382, 190),
+                                            (20,40), "picture/volumnButton.png")            
         pass
 
     def Upgrade(self):
