@@ -3,11 +3,13 @@ from pygame.locals import*
 from CObject import *
 
 class StuProperty:   ## Property of monster
-    def __init__(self, monsterType, HP, speed, pictureName):
+    def __init__(self, monsterType, HP, speed, pictureName, endPos, gameMap):
         self.nType          = monsterType     ## type
         self.nHP            = HP              ## Hp
         self.nSpeed         = speed           ## speed
         self.strPictureName = pictureName     ## picture name
+        self.tupEndPos      = endPos          ## end position
+        self.listMap        = gameMap         ## game map
 
 class CMonster(CObject):
 
@@ -17,6 +19,22 @@ class CMonster(CObject):
         self.tulPos = initialPos
         self.DataInit(monsterProperty)
 
+        #####
+        self.nStepsPerTile = 4. ## How many step walking though a tile 
+        self.nFrames = 4.  ## numbers of frames
+        self.fTimePerFrame = self.nSpeed / self.nStepsPerTile / self.nFrames
+
+        self.fSinceLastFrame = 0.
+        self.nCurrentFrame = 0
+        self.nCurrentStep = 0
+        self.tupVelocity = (0,0)
+        self.tupTileSize = (64,64)
+        
+        self.bWalking = False
+        self.tupCurrentPos = self.PosConvert(initialPos)
+        self.tupTaretPos = self.tupCurrentPos
+        self.tupVelocity = (0, 0)
+
 
     def DataInit(self, monsterProperty):
         self.image = pygame.image.load(monsterProperty.strPictureName
@@ -24,14 +42,52 @@ class CMonster(CObject):
         self.nType = monsterProperty.nType
         self.nHP = monsterProperty.nHP
         self.nSpeed = monsterProperty.nSpeed
+        self.tupEndPos = monsterProperty.tupEndPos
+        self.listMap = monsterProperty.listMap
 
 
-    def Update(self, surface):
+    def Update(self, deltaTime):
+        if not self.bWalking:
+            return
 
-        pass
-
-
+        self.fSinceLastFrame += deltaTime
+        if self.fSinceLastFrame >= self.fTimePerFrame * (
+            self.nCurrentStep * self.nFrames + self.nCurrentFrame):
+            self.tulPos = (self.tulPos[0] + self.tupVelocity[0],
+                           self.tulPos[1] + self.tupVelocity[1])
+            ## SetTexPos
+            self.nCurrentFrame += 1
+            if self.nCurrentFrame >= self.nFrames:
+                self.nCurrentStep += 1
+                self.nCurrentFrame = 0
+            if self.nCurrentStep >= self.nStepsPerTile:
+                self.tupCurrentPos = self.tupTaretPos
+                self.bWalking = False
+            
 
     def Render(self, deltaTime, surface):
 
         CObject.Render(self, deltaTime, surface)
+
+    def PosConvert(self, pos):
+        return (pos[0] // 64, pos[1] // 64)
+
+
+    def WalkTo(self, row, col):
+        if abs(row - self.tupCurrentPos[1])>1 or abs(
+            col - self.tupCurrentPos[0]) > 1:
+            return
+        if self.tupCurrentPos[0] != col or self.tupCurrentPos[1] != row:
+            self.bWalking = True
+            self.tupTaretPos = (col, row)
+
+            self.fSinceLastFrame = 0
+	    self.nCurrentFrame = 0
+	    self.nCurrentStep = 0
+	    
+	    x1 = ((self.tupTaretPos[0] - self.tupCurrentPos[0])
+                  * self.tupTileSize[0] / self.nStepsPerTile / self.nFrames)
+	    y1 = ((self.tupTaretPos[1] - self.tupCurrentPos[1])
+                  * self.tupTileSize[1] / self.nStepsPerTile / self.nFrames)
+	    self.tupVelocity = (x1, y1)
+            
