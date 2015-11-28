@@ -53,6 +53,17 @@ class CGame():
                 self.surface.blit(self.font.render("FPS : {} ".format(int(nFps)),1,
                                                pygame.color.THECOLORS["white"]),(0,0))
 
+            self.MouseUpdate() #update the mouse
+
+    #update the mouse
+    def MouseUpdate(self):
+        UrlMouseImage = 'picture/tree.png'   #the image of mouse
+        MouseCursor = pygame.image.load(UrlMouseImage).convert_alpha()
+        x, y = pygame.mouse.get_pos()
+        pygame.mouse.set_visible(False)
+        x -= MouseCursor.get_width() / 2
+        y -= MouseCursor.get_height() / 2
+        self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
         self.musicVoice = music("2.mp3")
