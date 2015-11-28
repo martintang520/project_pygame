@@ -8,6 +8,7 @@ pygame.display.flip()
 
 gGame = CGame(50, surface)
 
+
 while True :
     gGame.Update()
     pygame.display.update()
@@ -16,5 +17,5 @@ while True :
     gGame.EventListener(event)
     if event.type == pygame.QUIT or CGame.myCStage.GetStageState()==4:
         break
-    
+
 pygame.quit()
