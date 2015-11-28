@@ -19,6 +19,7 @@ class CMonster(CObject):
                
         self.tulSize = size
         self.tulPos = initialPos
+        self.nOrder = 0
         self.DataInit(monsterProperty)
 
         #####
@@ -42,8 +43,11 @@ class CMonster(CObject):
 
 
     def DataInit(self, monsterProperty):
-        self.image = pygame.image.load(monsterProperty.strPictureName
-                                       ).convert_alpha() 
+        ##self.image = pygame.image.load(monsterProperty.strPictureName, 
+        ##                               ).convert_alpha()
+        self.LoadImage(monsterProperty.strPictureName, 64, 4)
+        self.image = self.images[self.nOrder]
+        
         self.nType = monsterProperty.nType
         self.nHP = monsterProperty.nHP
         self.nSpeed = monsterProperty.nSpeed
@@ -62,7 +66,9 @@ class CMonster(CObject):
             self.nCurrentStep * self.nFrames + self.nCurrentFrame):
             self.tulPos = (self.tulPos[0] + self.tupVelocity[0],
                            self.tulPos[1] + self.tupVelocity[1])
-            ## SetTexPos
+            
+            self.image = self.images[self.nCurrentFrame]
+            
             self.nCurrentFrame += 1
             if self.nCurrentFrame >= self.nFrames:
                 self.nCurrentStep += 1
@@ -121,4 +127,13 @@ class CMonster(CObject):
 
                 if self.CanPass(self.tupNext):
                     self.WalkTo(self.tupNext[1], self.tupNext[0])
+
+
+    def LoadImage(self, fileName, width, number):
+        myImage = pygame.image.load(fileName).convert_alpha()
+        
+        height = myImage.get_height()
+
+        self.images = [myImage.subsurface(Rect((i * width, 0), (width, height))
+                    ) for i in range(number)]
             
