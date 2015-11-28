@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import*
 
 class CStage():
-    nStage = 2  ##Finite State Machine
+    nStage = 1  ##Finite State Machine
     
     def __init__(self):
         pass
@@ -10,10 +10,10 @@ class CStage():
     def MouseButtonDown(self, event):
         pass
 
-    def MouseMotion(self):
+    def MouseMotion(self,event):
         pass
 
-    def KeyDown(self):
+    def KeyDown(self,event):
         pass
 
     @staticmethod

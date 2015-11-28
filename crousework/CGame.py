@@ -3,6 +3,7 @@ from pygame.locals import*
 ##from ball import *
 from CStageStart import *
 from CStageGame import *
+from CStageSet import *
 
 class CGame():
     nState = 1  ##Finite State Machine
@@ -73,7 +74,7 @@ class CGame():
             CGame.myCStage.MouseButtonDown(event)
             print "click"
         elif event.type == MOUSEMOTION:
-            
+            CGame.myCStage.MouseMotion(event)
             pass
         elif event.type == KEYDOWN:
             print "key"
@@ -86,6 +87,8 @@ class CGame():
                 CGame.myCStage = CStageStart(self.surface)
             elif CGame.nState == 2:
                 CGame.myCStage = CStageGame(self.surface)
+            elif CGame.nState == 3:
+                CGame.myCStage = CStageSet(self.surface)
 
     ##@staticmethod
     ##def SetState(state):

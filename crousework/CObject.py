@@ -17,3 +17,10 @@ class CObject(pygame.sprite.Sprite):
     def Render(self, deltaTime, surface):
         surface.blit(self.image, self.tulPos)
         pass
+
+    def SetImage(self, pictureName):
+        self.image = pygame.image.load(pictureName).convert_alpha()
+
+
+    def SetPosition(self,pos):
+        self.tulPos = pos
