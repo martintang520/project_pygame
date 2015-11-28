@@ -6,28 +6,24 @@ from CObjectManager import *
 
 class CStageSet(CStage):
 
-    def __init__(self, surface,music):
+    def __init__(self, surface,music,sound):
         self.surface = surface
         self.myObjManger = CObjectManager()
         self.musicVoice = music
+        self.soundVoice = sound
 
         self.GameInit()
 
 
     def GameInit(self):
 
-        self.nVolumn=0
+        self.nVolumn=self.musicVoice.musicVolumn()*4
         self.boolMusic=self.musicVoice.musicState()
         
         self.nVolumnIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (360, 180),
                                             (460,60), "picture/volumn.png")
-        self.nVolumnPointIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (100*self.nVolumn+382, 190),
+        self.nVolumnPointIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (self.nVolumn+382, 190),
                                             (20,40), "picture/volumnButton.png")
-
-        self.nSoundOpenIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (360, 360),
-                                            (105,100), "picture/musicOpen2.png")
-        self.nSoundCloseIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (500, 360),
-                                            (105,100), "picture/musicClose1.png")
 
         self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (800, 500),
                                             (100,100), "picture/OKButton1.png")
@@ -36,8 +32,8 @@ class CStageSet(CStage):
                                             (200,60), "picture/TEXT1.png")
         self.nText2Index = self.myObjManger.CreateButtonNode((0, 0, 0), (90, 380),
                                             (200,60), "picture/TEXT2.png")
-        self.nTextSoundIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (630, 360),
-                                            (200,100), "picture/TEXT3.png")        
+
+        self.SoundStateDecision()
         
         self.butVolumn = self.myObjManger.GetObject(self.nVolumnIndex)
         self.butVolumnPoint = self.myObjManger.GetObject(self.nVolumnPointIndex)
@@ -52,7 +48,7 @@ class CStageSet(CStage):
 
         self.imageTEXTSound = self.myObjManger.GetObject(self.nTextSoundIndex)
 
-        self.SoundStateDecision()
+
         
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
@@ -77,15 +73,20 @@ class CStageSet(CStage):
 
     def SoundStateDecision(self):
         if self.boolMusic:
-            self.butSoundOpen.SetImage("picture/musicOpen2.png")
-            self.butSoundClose.SetImage("picture/musicClose1.png")
-            self.imageTEXTSound.SetImage("picture/TEXT3.png")
+            self.nSoundOpenIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (360, 360),
+                                                (105,100), "picture/musicOpen2.png")
+            self.nSoundCloseIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (500, 360),
+                                                (105,100), "picture/musicClose1.png")
+            self.nTextSoundIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (630, 360),
+                                                (200,100), "picture/TEXT3.png")
         else:
-            self.butSoundOpen.SetImage("picture/musicOpen1.png")
-            self.butSoundClose.SetImage("picture/musicClose2.png")
-            self.imageTEXTSound.SetImage("picture/TEXT4.png")
-
-            
+            self.nSoundOpenIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (360, 360),
+                                                (105,100), "picture/musicOpen1.png")
+            self.nSoundCloseIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (500, 360),
+                                                (105,100), "picture/musicClose2.png")
+            self.nTextSoundIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (630, 360),
+                                                (200,100), "picture/TEXT4.png")
+                
     def SoundDecision(self,event):
         
         if self.butSoundOpen.OnButton(event):
@@ -111,7 +112,7 @@ class CStageSet(CStage):
             self.musicVoice.pause()
             print 3
 
-##turn up or down the Volumn of music
+##turn up or down the Volumn of music and sound
     def VolumnDecision(self,event):
 
         if self.butVolumn.OnButton(event):
@@ -125,6 +126,11 @@ class CStageSet(CStage):
             else:
                 self.butVolumnPoint.SetPosition((event.pos[0],self.butVolumnPoint.GetPosition()[1]))
             print self.nVolumn
+        self.Volume()
+
+    def Volume(self):
+        self.musicVoice.setvolumn(self.nVolumn)
+        self.soundVoice.setvolumn(self.nVolumn)
             
     def MouseMotion(self, event):
         self.MotionDecision(event)

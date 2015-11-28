@@ -53,22 +53,11 @@ class CGame():
                 self.surface.blit(self.font.render("FPS : {} ".format(int(nFps)),1,
                                                pygame.color.THECOLORS["white"]),(0,0))
 
-            self.MouseUpdate() #update the mouse
-
-    #update the mouse
-    def MouseUpdate(self):
-        UrlMouseImage = 'picture/tree.png'   #the image of mouse
-        MouseCursor = pygame.image.load(UrlMouseImage).convert_alpha()
-        x, y = pygame.mouse.get_pos()
-        pygame.mouse.set_visible(False)
-        x -= MouseCursor.get_width() / 2
-        y -= MouseCursor.get_height() / 2
-        self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
         self.musicVoice = music("2.mp3")
         self.musicVoice.play(0)
-        print 1
+        self.soundVoice = sound("1.wav")
         CGame.myCStage = CStageStart(self.surface)
         
         
@@ -102,9 +91,9 @@ class CGame():
             if CGame.nState == 1:
                 CGame.myCStage = CStageStart(self.surface)
             elif CGame.nState == 2:
-                CGame.myCStage = CStageGame(self.surface)
+                CGame.myCStage = CStageGame(self.surface,self.soundVoice)
             elif CGame.nState == 3:
-                CGame.myCStage = CStageSet(self.surface,self.musicVoice)
+                CGame.myCStage = CStageSet(self.surface,self.musicVoice,self.soundVoice)
 
     ##@staticmethod
     ##def SetState(state):

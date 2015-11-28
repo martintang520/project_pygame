@@ -6,11 +6,14 @@ from CMap import *
 
 class CStageGame(CStage):
     
-    def __init__(self, surface):
+    def __init__(self, surface,sound):
         self.surface = surface
         self.myGameMap = CMap()
         self.myObjManger = CObjectManager()
-
+        self.Sound = sound
+        self.boolSound = self.Sound.soundState()
+        print self.boolSound
+        self.Sound.play(1)
         self.GameInit()
 
     def GameInit(self):
@@ -25,6 +28,7 @@ class CStageGame(CStage):
         MonsterTest = StuProperty(1, 20, 5, "picture/monster1.png")
         self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 0),
                           self.surface.get_size(), MonsterTest)
+
 
     
     def Update(self,deltaTime):

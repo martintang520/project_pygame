@@ -6,11 +6,12 @@ class sound:
              
               self.a=a
               pygame.mixer.init()
-       #0 loop ,n means times#
-       def play(self,c):
+              self.State = True
               b="sound/"+self.a
               channel=pygame.mixer.find_channel()
               self.sound = pygame.mixer.Sound(b)
+       #0 loop ,n means times#
+       def play(self,c):
               if c ==0:
                      self.sound.play(-1,0)
               else:
@@ -18,9 +19,13 @@ class sound:
        def stop(self):             
               self.sound.stop()
        #c between 0-1#
-       def setvolume(self,c):
-              c=c/100.0
-              self.sound.set_volume(c)
+       def setvolumn(self,c):
+              self.c=c
+              v=c/100.0
+              self.sound.set_volume(v)
+       #get sound state true or false
+       def soundState(self):
+              return self.State
 
 
 class music:
@@ -30,6 +35,7 @@ class music:
               track = pygame.mixer.music.load(b)
               pygame.mixer.music.set_volume(0.5)
               self.State = False
+              self.c=100
        def play(self,a):
               if a == 0:
                      pygame.mixer.music.play(-1,0.0)
@@ -45,12 +51,16 @@ class music:
               pygame.mixer.music.stop()
               self.State = False
               
-       def setvolume(self,c):
-              c=c/100.0
-              pygame.mixer.music.set_volume(c)
+       def setvolumn(self,c):
+              self.c=c
+              v=c/100.0
+              pygame.mixer.music.set_volume(v)
 
        def musicState(self):
               return self.State
+
+       def musicVolumn(self):
+              return self.c
 
 
 
