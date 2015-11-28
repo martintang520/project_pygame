@@ -13,6 +13,8 @@ class StuProperty:   ## Property of monster
 
 class CMonster(CObject):
 
+    Direction = {0:(1, 0), 1:(0, 1), 2:(-1, 0), 3:(0, -1)}
+
     def __init__(self, color, initialPos, size, monsterProperty):
                
         self.tulSize = size
@@ -35,6 +37,9 @@ class CMonster(CObject):
         self.tupTaretPos = self.tupCurrentPos
         self.tupVelocity = (0, 0)
 
+        #####
+        self.tupNext = (0,0)
+
 
     def DataInit(self, monsterProperty):
         self.image = pygame.image.load(monsterProperty.strPictureName
@@ -47,7 +52,9 @@ class CMonster(CObject):
 
 
     def Update(self, deltaTime):
+
         if not self.bWalking:
+            self.Next()
             return
 
         self.fSinceLastFrame += deltaTime
@@ -74,9 +81,10 @@ class CMonster(CObject):
 
 
     def WalkTo(self, row, col):
-        if abs(row - self.tupCurrentPos[1])>1 or abs(
-            col - self.tupCurrentPos[0]) > 1:
+        if (abs(row - self.tupCurrentPos[1]) + abs(
+            col - self.tupCurrentPos[0]) > 1):
             return
+        
         if self.tupCurrentPos[0] != col or self.tupCurrentPos[1] != row:
             self.bWalking = True
             self.tupTaretPos = (col, row)
@@ -84,10 +92,33 @@ class CMonster(CObject):
             self.fSinceLastFrame = 0
 	    self.nCurrentFrame = 0
 	    self.nCurrentStep = 0
-	    
+
 	    x1 = ((self.tupTaretPos[0] - self.tupCurrentPos[0])
                   * self.tupTileSize[0] / self.nStepsPerTile / self.nFrames)
 	    y1 = ((self.tupTaretPos[1] - self.tupCurrentPos[1])
                   * self.tupTileSize[1] / self.nStepsPerTile / self.nFrames)
 	    self.tupVelocity = (x1, y1)
+
+
+    def CanPass(self, pos):
+        if self.listMap[pos[1]][pos[0]] == 1:
+            return True
+        else:
+            return False
+        
+    
+    def Next(self):
+
+        self.listMap[self.tupCurrentPos[1]][self.tupCurrentPos[0]] = -1
+        for i in range(4):
+            if (self.tupCurrentPos[0] + CMonster.Direction[i][0] >= 0 and
+                self.tupCurrentPos[0] + CMonster.Direction[i][0] < 14 and
+                self.tupCurrentPos[1] + CMonster.Direction[i][1] >= 0 and
+                self.tupCurrentPos[1] + CMonster.Direction[i][1] < 14):
+                
+                self.tupNext = (self.tupCurrentPos[0] + CMonster.Direction[i][0],
+                                self.tupCurrentPos[1] + CMonster.Direction[i][1])
+
+                if self.CanPass(self.tupNext):
+                    self.WalkTo(self.tupNext[1], self.tupNext[0])
             
