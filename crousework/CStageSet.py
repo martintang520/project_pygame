@@ -17,7 +17,7 @@ class CStageSet(CStage):
     def GameInit(self):
 
         self.nVolumn=0
-        self.boolMusic=True
+        self.boolMusic=self.musicVoice.musicState()
         
         self.nVolumnIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (360, 180),
                                             (460,60), "picture/volumn.png")
@@ -51,6 +51,8 @@ class CStageSet(CStage):
         self.imageTEXT2 = self.myObjManger.GetObject(self.nText2Index)
 
         self.imageTEXTSound = self.myObjManger.GetObject(self.nTextSoundIndex)
+
+        self.SoundStateDecision()
         
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
@@ -72,6 +74,18 @@ class CStageSet(CStage):
             CStage.SetStage(1)
             
 ## open or close music
+
+    def SoundStateDecision(self):
+        if self.boolMusic:
+            self.butSoundOpen.SetImage("picture/musicOpen2.png")
+            self.butSoundClose.SetImage("picture/musicClose1.png")
+            self.imageTEXTSound.SetImage("picture/TEXT3.png")
+        else:
+            self.butSoundOpen.SetImage("picture/musicOpen1.png")
+            self.butSoundClose.SetImage("picture/musicClose2.png")
+            self.imageTEXTSound.SetImage("picture/TEXT4.png")
+
+            
     def SoundDecision(self,event):
         
         if self.butSoundOpen.OnButton(event):
