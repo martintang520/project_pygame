@@ -37,7 +37,7 @@ class CStageGame(CStage):
         self.DrawMap();
 
         ##test
-        MonsterTest = StuProperty(1, 20, 1, "picture/monster.png", (0,1), self.listMap)
+        MonsterTest = StuProperty(1, 20, 1, "picture/monster1.png", (0,1), self.listMap)
         self.MonsterIndex = self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 64),
                           self.surface.get_size(), MonsterTest)
 
