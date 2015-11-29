@@ -34,9 +34,21 @@ class CStageGame(CStage):
         self.DrawMap();
 
         ##test
-        MonsterTest = StuProperty(1, 20, 1, "picture/monster.png", (0,1), self.listMap)
+        self.nOrder = 0
+        self.nMonsterNumber = 0
+        self.fInterval = 0.
+        self.fGap = 0.
+        self.listMonsterIndex = []
+        self.listCreatMonster = [(0, 5, 5), (0, 3, 3), (1, 3, 5), (0, 0, 0)]
+        self.dictMonsterType = {0:StuProperty(1, 20, 1.5, "picture/monster1.png",
+                                            (0,1), self.listMap),
+                                1:StuProperty(2, 20, 1., "picture/monster2.png",
+                                            (0,1), self.listMap)}
+        
         self.MonsterIndex = self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 64),
-                          self.surface.get_size(), MonsterTest)
+                          self.surface.get_size(), self.dictMonsterType[0])
+        ######
+        
 
     def MusicInit(self, sound):
         self.Sound = sound
@@ -45,6 +57,7 @@ class CStageGame(CStage):
         
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
+        self.MonsterCreater(deltaTime)
         
 
     def Render(self, deltaTime):
@@ -76,6 +89,8 @@ class CStageGame(CStage):
             self.DeleteIndex()
 
         print self.tulCurrentPoint
+
+        
     def DrawMap(self):
         categoryPicture = {
             1 : "picture/path.png",
@@ -169,6 +184,32 @@ class CStageGame(CStage):
     def UpgradeDecision(self,event):
         pass
 
+
+    ###### test 
+    def MonsterCreater(self, deltaTime):
+        if self.listCreatMonster[self.nOrder][2] == 0:
+            return
+            
+        
+        if self.nMonsterNumber < self.listCreatMonster[self.nOrder][1]:
+            if self.fGap >= 1.5:
+                monsterIndex = (self.myObjManger.CreateMonsterNode((0, 0, 0),
+                    (0, 64), self.surface.get_size(),
+                    self.dictMonsterType[self.listCreatMonster[self.nOrder][0]]))
+                self.listMonsterIndex.append(monsterIndex)
+                self.nMonsterNumber += 1
+                print self.nMonsterNumber
+                self.fGap = 0
+            else:
+                self.fGap += deltaTime
+            
+        else:
+            if self.fInterval >= self.listCreatMonster[self.nOrder][2]:
+                self.fInterval = 0
+                self.nMonsterNumber = 0
+                self.nOrder += 1
+            else:
+                self.fInterval += deltaTime
 
 
 

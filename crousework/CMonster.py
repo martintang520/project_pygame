@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import*
 from CObject import *
+import copy
 
 class StuProperty:   ## Property of monster
     def __init__(self, monsterType, HP, speed, pictureName, endPos, gameMap):
@@ -53,7 +54,7 @@ class CMonster(CObject):
         self.nHP = monsterProperty.nHP
         self.nSpeed = monsterProperty.nSpeed
         self.tupEndPos = monsterProperty.tupEndPos
-        self.listMap = monsterProperty.listMap
+        self.listMap = copy.deepcopy(monsterProperty.listMap)
 
 
     def Update(self, deltaTime):
