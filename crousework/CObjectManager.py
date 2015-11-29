@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from CObject import *
 from CButton import *
+from CTower import *
 from CMonster import *
 from CBullet import *
 
@@ -32,6 +33,14 @@ class CObjectManager():
 
     def CreateButtonNode(self, color, pos, size, pirtureName):
         newObject = CButton(color, pos, size, pirtureName)
+        self.dictObject[self.index] = newObject
+        self.index += 1
+
+        return self.index - 1
+
+    
+    def CreateTowerNode(self, color, pos, size, pirtureName):
+        newObject = CTower(color, pos, size, pirtureName)
         self.dictObject[self.index] = newObject
         self.index += 1
 
