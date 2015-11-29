@@ -60,8 +60,8 @@ class CGame():
         MouseCursor = pygame.image.load(UrlMouseImage).convert_alpha()
         x, y = pygame.mouse.get_pos()
         pygame.mouse.set_visible(False)
-        x -= MouseCursor.get_width() / 2
-        y -= MouseCursor.get_height() / 2
+        x -= MouseCursor.get_width() / 2-12
+        y -= MouseCursor.get_height() / 2-13
         self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
