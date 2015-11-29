@@ -40,12 +40,13 @@ class CMonster(CObject):
 
         #####
         self.tupNext = (0,0)
+        self.bchangeDirection = False ##Change Frame picture
 
 
     def DataInit(self, monsterProperty):
         ##self.image = pygame.image.load(monsterProperty.strPictureName, 
         ##                               ).convert_alpha()
-        self.LoadImage(monsterProperty.strPictureName, 64, 4)
+        self.LoadImage(monsterProperty.strPictureName, 64, 8)
         self.image = self.images[self.nOrder]
         
         self.nType = monsterProperty.nType
@@ -66,8 +67,11 @@ class CMonster(CObject):
             self.nCurrentStep * self.nFrames + self.nCurrentFrame):
             self.tulPos = (self.tulPos[0] + self.tupVelocity[0],
                            self.tulPos[1] + self.tupVelocity[1])
-            
-            self.image = self.images[self.nCurrentFrame]
+
+            if self.bchangeDirection == True:
+                self.image = self.images[self.nCurrentFrame]
+            else:
+                self.image = self.images[self.nCurrentFrame + 4]
             
             self.nCurrentFrame += 1
             if self.nCurrentFrame >= self.nFrames:
@@ -126,6 +130,11 @@ class CMonster(CObject):
                                 self.tupCurrentPos[1] + CMonster.Direction[i][1])
 
                 if self.CanPass(self.tupNext):
+                    if CMonster.Direction[i][0] < 0:
+                        self.bchangeDirection = False
+                    else:
+                        self.bchangeDirection = True
+                        
                     self.WalkTo(self.tupNext[1], self.tupNext[0])
 
 
