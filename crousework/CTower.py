@@ -2,13 +2,13 @@ import pygame
 
 from pygame.locals import*
 
-from CObject import *
+from CButton import *
 
 
 
 
 
-class CTower(CObject):
+class CTower(CButton):
 
 
     def __init__(self, color, initialPos, size, pictureName):
