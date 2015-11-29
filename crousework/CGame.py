@@ -56,7 +56,7 @@ class CGame():
 
     #update the mouse
     def MouseUpdate(self):
-        UrlMouseImage = 'picture/tree.png'   #the image of mouse
+        UrlMouseImage = 'picture/mouse.gif'   #the image of mouse
         MouseCursor = pygame.image.load(UrlMouseImage).convert_alpha()
         x, y = pygame.mouse.get_pos()
         pygame.mouse.set_visible(False)
