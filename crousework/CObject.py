@@ -24,3 +24,10 @@ class CObject(pygame.sprite.Sprite):
 
     def SetPosition(self,pos):
         self.tulPos = pos
+
+    def OnButton(self,event):
+
+        if event.pos[0]>self.tulPos[0] and event.pos[0]<(self.tulPos[0]+self.tulSize[0])and event.pos[1]>self.tulPos[1] and event.pos[1]<(self.tulPos[1]+self.tulSize[1]):
+            return True
+        else:
+            return False

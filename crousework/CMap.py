@@ -31,3 +31,7 @@ class CMap():
             return True
         else:
             return False
+
+    def BuildTower(self, mapNumber, index):
+        print index
+        CMap.listMapGroup[mapNumber][index[1]][index[0]]=6
