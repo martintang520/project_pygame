@@ -11,9 +11,11 @@ from CButton import *
 class CTower(CButton):
 
 
-    def __init__(self, color, initialPos, size, pictureName):
+    def __init__(self, color, initialPos, size, pictureName,rangeTower):
 
         CObject.__init__(self, color, initialPos, size, pictureName)
+
+        self.rangeTower=rangeTower
 
 
     def Update(self, surface):

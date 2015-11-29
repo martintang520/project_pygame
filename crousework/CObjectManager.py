@@ -39,8 +39,8 @@ class CObjectManager():
         return self.index - 1
 
     
-    def CreateTowerNode(self, color, pos, size, pirtureName):
-        newObject = CTower(color, pos, size, pirtureName)
+    def CreateTowerNode(self, color, pos, size, pirtureName,rangeTower):
+        newObject = CTower(color, pos, size, pirtureName,rangeTower)
         self.dictObject[self.index] = newObject
         self.index += 1
 
@@ -61,7 +61,7 @@ class CObjectManager():
         return self.index - 1
 
     def DeleteObjectNode(self, index):
-        print index
+
         if self.dictObject.has_key(index):
             delObj = self.dictObject.pop(index)
             del delObj

@@ -20,7 +20,7 @@ class CStageGame(CStage):
         self.currentTower=[]
 
         #self.Position=[]
-        self.typeUpgrade =[(1,4),(2,5),(3,6),(4,7),(5,8),(6,9)]
+        self.typeUpgrade =[(1,4),(2,5),(3,6),(4,7),(5,8),(6,9),(7,7),(8,8),(9,9)]
 
         self.GameInit()
         self.MusicInit(sound)
@@ -33,7 +33,7 @@ class CStageGame(CStage):
                     self.surface.get_size(), "picture/background.png")
         self.DrawMap();
 
-        ## monster creater init
+        ##test
         self.nOrder = 0
         self.nMonsterNumber = 0
         self.fInterval = 0.
@@ -47,7 +47,7 @@ class CStageGame(CStage):
         
         self.MonsterIndex = self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 64),
                           self.surface.get_size(), self.dictMonsterType[0])
-        
+
 
     def MusicInit(self, sound):
         self.Sound = sound
@@ -56,7 +56,6 @@ class CStageGame(CStage):
         
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
-        self.MonsterCreater(deltaTime)
         
 
     def Render(self, deltaTime):
@@ -74,22 +73,34 @@ class CStageGame(CStage):
             if self.myGameMap.IsBlank(self.nMapNumber, clickPoint):
                 self.Build(event)
             elif self.myGameMap.IsTower(self.nMapNumber, clickPoint):
-                print "upgrade"
                 self.Upgrade(event)
         else:
             self.boolIsBuild=True
             self.unBuild()
-            if self.BuildDecision(event,self.currentTower) !=-1:
-                self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
-                self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
-                                                               (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
-                                                               (64,64), "picture/tower"+str(self.BuildDecision(event,self.currentTower)+1)+".png"),
-                            self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
-            self.DeleteIndex()
+            if self.myGameMap.IsBlank(self.nMapNumber, self.tulCurrentPoint):
+                if self.BuildDecision(event,self.currentTower) !=-1:
+                    self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
+                    self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
+                                                                   (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
+                                                                   (64,64), "picture/tower"+str(self.BuildDecision(event,self.currentTower)+1)+".png",128),
+                                 self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
+                self.DeleteIndex()
+                    
+            elif self.myGameMap.IsTower(self.nMapNumber, self.tulCurrentPoint):
+                if self.UpgradeDecision(event,self.currentTower)!=-1:
+                    if self.UpgradeDecision(event,self.currentTower)==1:
+                        self.deleteBuild(self.Index[self.tulCurrentPoint])
+                        self.myGameMap.DeleteTower(self.nMapNumber, self.tulCurrentPoint)
+                        self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),
+                                                           "picture/blank.png",128)
+                    elif self.UpgradeDecision(event,self.currentTower)==2:
+                        self.deleteBuild(self.Index[self.tulCurrentPoint])
+                        self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),
+                                                                        "picture/tower"+str(self.typeUpgrade[self.Tower[self.tulCurrentPoint]-1][1])+".png",128),
+                                      self.typeUpgrade[self.Tower[self.tulCurrentPoint]-1][1],self.tulCurrentPoint)
+  
+                self.DeleteIndex()
 
-        print self.tulCurrentPoint
-
-        
     def DrawMap(self):
         categoryPicture = {
             1 : "picture/path.png",
@@ -103,7 +114,6 @@ class CStageGame(CStage):
                 if self.listMap[y][x] != 0:
                     self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
-
     ##create monster in update
     def MonsterCreater(self, deltaTime):
         if self.listCreatMonster[self.nOrder][2] == 0:
@@ -131,22 +141,19 @@ class CStageGame(CStage):
                 self.fInterval += deltaTime
 
 
+
     ##build tower
     def Build(self,event):
 
-        print "in build"
-
-
         ntower1=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
-                                                                       (64,64), "picture/tower1.png")
+                                                                       (64,64), "picture/tower1.png",128)
         ntower2=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)+64,self.GetPointTop(event.pos)),
-                                                                       (64,64), "picture/tower2.png")
-        
+                                                                       (64,64), "picture/tower2.png",128)
+        ntower3=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)+128,self.GetPointTop(event.pos)),
+                                                                       (64,64), "picture/tower3.png",128)
         self.AddNewIndex(ntower1)
         self.AddNewIndex(ntower2)
-
-        print self.currentIndex
-        print 'shang mian shi dang qian zhizhenji'
+        self.AddNewIndex(ntower3)
 
     def BuildDecision(self, event, tower):
         
@@ -158,7 +165,6 @@ class CStageGame(CStage):
 
     def unBuild(self):
         for n in self.currentIndex:
-            print n
             self.myObjManger.DeleteObjectNode(n)
             
     def deleteBuild(self,index):
@@ -167,13 +173,10 @@ class CStageGame(CStage):
     ##update tower
     def Upgrade(self,event):
         self.AddNewIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
-                                                           (64,64), "picture/cross.png"))
+                                                           (64,64), "picture/cross.png",128))
         self.AddNewIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)+64,self.GetPointTop(event.pos)),(64,64),
-                                                           "picture/tower"+str(self.typeUpgrade[self.Tower[self.tulCurrentPoint]-1][1])+".png"))
+                                                           "picture/tower"+str(self.typeUpgrade[self.Tower[self.tulCurrentPoint]-1][1])+".png",128))          
 
-
-        #find the type of upgrade tower
-        #self.typeUpgrade[typeBuild[self.GetPoint(event.pos)[0]][self.GetPoint(event.pos)[1]]][1]
 
     ## for build or upgrade
     def AddNewIndex(self,index):
@@ -201,14 +204,19 @@ class CStageGame(CStage):
         return tulTop
 
 
-    ## after build or upgrade
+    ## after build or upgrade 
     def AddIndex(self,index,buildtype,position):
         self.Index[position]=index
         self.Tower[position]=buildtype
 
 
-    def UpgradeDecision(self,event):
-        pass
+    def UpgradeDecision(self,event,tower):
+        if tower[0].OnButton(event) :
+            return 1
+        elif tower[1].OnButton(event):
+            return 2
+        return -1
+
 
 
 
