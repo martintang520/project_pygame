@@ -93,9 +93,13 @@ class CStageGame(CStage):
         
         for x in range(0, 15):
             for y in range(0, 10):
-                if self.listMap[y][x] != 0:
+                if self.listMap[y][x] == 0 or self.listMap[y][x] == 5:
+                    continue
+                else:
                     self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
+        self.myObjManger.CreateObjectNode((0, 0, 0), (8 * 64, 2 * 64),
+                                 (128, 128), "picture/EiffelTower.png")
                     
     ##create monster in update
     def MonsterCreater(self, deltaTime):
