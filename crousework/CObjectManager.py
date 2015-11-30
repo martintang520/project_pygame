@@ -78,5 +78,6 @@ class CObjectManager():
         else:
             return False
 
+
     def ClearObjectDict(self):
         pass
