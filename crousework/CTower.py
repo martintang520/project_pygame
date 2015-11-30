@@ -16,9 +16,11 @@ class CTower(CButton):
         CObject.__init__(self, color, initialPos, size, pictureName)
 
         self.rangeTower=rangeTower
+        self.attacktimer = 2
 
 
-    def Update(self, surface):
+    def Update(self, deltaTime):
+        self.attacktimer += deltaTime
         pass
 
 
