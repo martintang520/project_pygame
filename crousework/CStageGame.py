@@ -56,6 +56,8 @@ class CStageGame(CStage):
         
     def Update(self,deltaTime):
         self.myObjManger.UpdateList(deltaTime)
+        self.MonsterCreater(deltaTime)
+        self.detection(deltaTime)
         
 
     def Render(self, deltaTime):
@@ -216,6 +218,17 @@ class CStageGame(CStage):
         elif tower[1].OnButton(event):
             return 2
         return -1
+
+    def detection(self,deltaTime):
+        for k in self.Index:
+            for j in self.listMonsterIndex:
+                oTowner=self.myObjManger.dictObject[self.Index[k]]
+                oMonster=self.myObjManger.dictObject[j]
+                if (oMonster.tulPos[0]-oTowner.tulPos[0])**2 + (oMonster.tulPos[1]-oTowner.tulPos[1])**2<= oTowner.rangeTower**2:
+                    print oTowner.tulPos
+                    print oMonster.tulPos
+                    print 44444444444444444
+
 
 
 
