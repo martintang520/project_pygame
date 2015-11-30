@@ -68,7 +68,7 @@ class CBullet(CObject):
               self.tupBulletUpPos[1] = self.tulPos[1] + self.tupBulletSpeed[1]
               self.tulPos = self.tupBulletUpPos
               
-              if abs(self.tulPos[0] - self.tupMonsterPos[0]) + abs(self.tulPos[1] - self.tupMonsterPos[1]) < 20:
+              if abs(self.tulPos[0] - self.tupMonsterPos[0]) + abs(self.tulPos[1] - self.tupMonsterPos[1]) < 10:
                   self.bBomb = True
               
               

@@ -82,6 +82,7 @@ class CStageGame(CStage):
                 if self.listMap[y][x] != 0:
                     self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
+                    
 ##create monster in update
     def MonsterCreater(self, deltaTime):
         if self.listCreatMonster[self.nOrder][2] == 0:
@@ -89,7 +90,7 @@ class CStageGame(CStage):
             
         
         if self.nMonsterNumber < self.listCreatMonster[self.nOrder][1]:
-            if self.fGap >= 1.5:
+            if self.fGap >= 1:
                 monsterIndex = (self.myObjManger.CreateMonsterNode((0, 0, 0),
                     (0, 64), self.surface.get_size(),
                     self.dictMonsterType[self.listCreatMonster[self.nOrder][0]]))
@@ -246,18 +247,21 @@ class CStageGame(CStage):
                     self.myObjManger.dictObject[self.dictTowerIndex[k]].attacktimer = 0
                     self.bulletAttack(self.dictTowerIndex[k], j)
 
+
     def bulletAttack(self, towerIndex, monsterIndex):
 
         newBullet = self.myObjManger.CreateBulletNode((0, 0, 0),
-            self.myObjManger.dictObject[towerIndex].tulPos, (64, 64), "picture/cross.png")
-        self.dictBulletindex[newBullet] = monsterIndex
+            self.myObjManger.dictObject[towerIndex].tulPos, (64, 64), "picture/bullet.png")
+        self.dictBulletindex[newBullet] = (monsterIndex, towerIndex)
+
 
     def bulletMovement(self,deltaTime):
         
         for bullet in self.dictBulletindex:
-            if self.myObjManger.HaveKey(self.dictBulletindex[bullet]):
-                self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime,
-                    self.myObjManger.dictObject[self.dictBulletindex[bullet]].tulPos)
+            if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
+                target = (self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos[0] + 32,
+                          self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos[1] + 32)
+                self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime, target)
             else:
                 self.myObjManger.dictObject[bullet].bBomb = True
 
@@ -268,8 +272,10 @@ class CStageGame(CStage):
         
         for bullet in self.dictBulletindex:
             if self.myObjManger.dictObject[bullet].bBomb == True:
-                if self.myObjManger.HaveKey(self.dictBulletindex[bullet]):
-                    self.myObjManger.dictObject[self.dictBulletindex[bullet]].nHP -= 5
+                if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
+                    self.myObjManger.dictObject[(self.dictBulletindex[bullet][0]
+                        )].nHP -= (self.myObjManger.dictObject[
+                        self.dictBulletindex[bullet][1]].nAttackPoint)
                 key = bullet
                 break
 
