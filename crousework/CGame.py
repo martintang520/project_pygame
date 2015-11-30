@@ -4,6 +4,7 @@ from pygame.locals import*
 from CStageStart import *
 from CStageGame import *
 from CStageSet import *
+from CStageIntro import *
 from CMusic import *
 
 class CGame():
@@ -106,6 +107,8 @@ class CGame():
                 CGame.myCStage = CStageGame(self.surface,self.soundVoice)
             elif CGame.nState == 3:
                 CGame.myCStage = CStageSet(self.surface,self.musicVoice,self.soundVoice)
+            elif CGame.nState == 5:
+                CGame.myCStage = CStageIntro(self.surface)
 
     ##@staticmethod
     ##def SetState(state):

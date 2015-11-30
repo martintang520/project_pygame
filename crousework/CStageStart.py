@@ -14,16 +14,20 @@ class CStageStart(CStage):
 
 
     def GameInit(self):
-        self.nStartIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 240),
+        self.nStartIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 180),
                                             (300,90), "picture/butStart1.png")
-        self.nSetIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 360),
+        self.nSetIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 300),
                                             (300,90), "picture/butSet1.png")
-        self.nExitIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 480),
+        self.nExitIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 540),
                                             (300,90), "picture/butExit1.png")
+        self.nIntroIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (330, 420),
+                                            (300,90), "picture/butIntro1.png")
+
 
         self.butStart = self.myObjManger.GetObject(self.nStartIndex)
         self.butSet = self.myObjManger.GetObject(self.nSetIndex)
         self.butExit = self.myObjManger.GetObject(self.nExitIndex)
+        self.butIntro = self.myObjManger.GetObject(self.nIntroIndex)
 
         
         
@@ -49,6 +53,8 @@ class CStageStart(CStage):
             CStage.SetStage(3)
         elif self.butExit.OnButton(event):
             CStage.SetStage(4)
+        elif self.butIntro.OnButton(event):
+            CStage.SetStage(5)
 
     def MouseMotion(self,event):
         self.MotionDecision(event)
@@ -69,3 +75,8 @@ class CStageStart(CStage):
             self.butExit.SetImage("picture/butExit2.png")
         else:
             self.butExit.SetImage("picture/butExit1.png")
+            
+        if self.butIntro.OnButton(event):
+            self.butIntro.SetImage("picture/butIntro2.png")
+        else:
+            self.butIntro.SetImage("picture/butIntro1.png")
