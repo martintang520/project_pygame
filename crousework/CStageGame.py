@@ -6,7 +6,7 @@ from CMap import *
 
 class CStageGame(CStage):
     
-    def __init__(self, surface,sound):
+    def __init__(self, surface):
         self.surface = surface
         self.myGameMap = CMap()
         self.myObjManger = CObjectManager()
@@ -23,7 +23,7 @@ class CStageGame(CStage):
         self.typeUpgrade =[(1,4),(2,5),(3,6),(4,7),(5,8),(6,9),(7,7),(8,8),(9,9)]
 
         self.GameInit()
-        self.MusicInit(sound)
+        ##self.MusicInit(sound)
         
     def GameInit(self):
         
@@ -48,7 +48,7 @@ class CStageGame(CStage):
         self.MonsterIndex = self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 64),
                           self.surface.get_size(), self.dictMonsterType[0])
 
-        self.listBulletindex = []
+        self.dictBulletindex = {}
 
 
     def MusicInit(self, sound):
@@ -60,8 +60,11 @@ class CStageGame(CStage):
         self.myObjManger.UpdateList(deltaTime)
         self.MonsterCreater(deltaTime)
         self.detection(deltaTime)
-        
+        self.bulletMovement(deltaTime)
+        self.RemoveBullet()
+        self.RemoveMonster()
 
+    
     def Render(self, deltaTime):
         self.myObjManger.RenderList(deltaTime, self.surface)
 
@@ -241,16 +244,53 @@ class CStageGame(CStage):
                          (oMonster.tulPos[1] - oTowner.tulPos[1] - 32) ** 2 <= oTowner.rangeTower ** 2 
                           and attackTime > 2):
                     self.myObjManger.dictObject[self.dictTowerIndex[k]].attacktimer = 0
-                    self.bulletattack(self.dictTowerIndex[k], j)
+                    self.bulletAttack(self.dictTowerIndex[k], j)
 
-    def bulletattack(self, towerIndex, monsterIndex):
+    def bulletAttack(self, towerIndex, monsterIndex):
 
         newBullet = self.myObjManger.CreateBulletNode((0, 0, 0),
             self.myObjManger.dictObject[towerIndex].tulPos, (64, 64), "picture/cross.png")
-        self.listBulletindex.append(newBullet)
-        self.myObjManger.dictObject[monsterIndex].nHP -= 5
-        pass
+        self.dictBulletindex[newBullet] = monsterIndex
 
+    def bulletMovement(self,deltaTime):
+        
+        for bullet in self.dictBulletindex:
+            if self.myObjManger.HaveKey(self.dictBulletindex[bullet]):
+                self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime,
+                    self.myObjManger.dictObject[self.dictBulletindex[bullet]].tulPos)
+            else:
+                self.myObjManger.dictObject[bullet].bBomb = True
+
+
+    def RemoveBullet(self):
+
+        key = -1
+        
+        for bullet in self.dictBulletindex:
+            if self.myObjManger.dictObject[bullet].bBomb == True:
+                if self.myObjManger.HaveKey(self.dictBulletindex[bullet]):
+                    self.myObjManger.dictObject[self.dictBulletindex[bullet]].nHP -= 5
+                key = bullet
+                break
+
+        if self.dictBulletindex.has_key(key):
+            self.dictBulletindex.pop(key)
+            self.myObjManger.DeleteObjectNode(key)
+
+
+    def RemoveMonster(self):
+
+        key = -1
+
+        for monster in self.listMonsterIndex:
+            if self.myObjManger.dictObject[monster].nHP <=0:
+                key = monster
+                break
+
+        if key != -1:
+            self.listMonsterIndex.remove(key)
+            self.myObjManger.DeleteObjectNode(key)
+                
 
 
 

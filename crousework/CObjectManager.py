@@ -72,5 +72,11 @@ class CObjectManager():
         else:
             return None
 
+    def HaveKey(self, index):
+        if self.dictObject.has_key(index):
+            return True
+        else:
+            return False
+
     def ClearObjectDict(self):
         pass

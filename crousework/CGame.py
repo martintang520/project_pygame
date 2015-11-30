@@ -66,7 +66,7 @@ class CGame():
         self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
-        self.MusicInit()
+        ##self.MusicInit()
         CGame.myCStage = CStageStart(self.surface)
         
     def MusicInit(self):
@@ -104,7 +104,7 @@ class CGame():
             if CGame.nState == 1:
                 CGame.myCStage = CStageStart(self.surface)
             elif CGame.nState == 2:
-                CGame.myCStage = CStageGame(self.surface,self.soundVoice)
+                CGame.myCStage = CStageGame(self.surface)
             elif CGame.nState == 3:
                 CGame.myCStage = CStageSet(self.surface,self.musicVoice,self.soundVoice)
             elif CGame.nState == 5:
