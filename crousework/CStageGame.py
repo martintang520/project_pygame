@@ -24,7 +24,8 @@ class CStageGame(CStage):
 
         self.GameInit()
         ##self.MusicInit(sound)
-        
+
+    ## game date init
     def GameInit(self):
         
         self.nMapNumber = 0
@@ -50,6 +51,11 @@ class CStageGame(CStage):
 
         self.dictBulletindex = {}
 
+        ## game over
+        self.bGameWin = False
+        self.bGameOver = False
+        self.nLife = 10
+
 
     def MusicInit(self, sound):
         self.Sound = sound
@@ -57,8 +63,16 @@ class CStageGame(CStage):
         self.Sound.play(1)
         
     def Update(self,deltaTime):
+
+        ## Game over break
+        if self.GameOver():
+            return
+        
         self.myObjManger.UpdateList(deltaTime)
+
         self.MonsterCreater(deltaTime)
+        self.GameOver()
+
         self.detection(deltaTime)
         self.bulletMovement(deltaTime)
         self.RemoveBullet()
@@ -83,7 +97,7 @@ class CStageGame(CStage):
                     self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
                     
-##create monster in update
+    ##create monster in update
     def MonsterCreater(self, deltaTime):
         if self.listCreatMonster[self.nOrder][2] == 0:
             return
@@ -108,11 +122,24 @@ class CStageGame(CStage):
                 self.nOrder += 1
             else:
                 self.fInterval += deltaTime
-## finishi created monster
+
+    ## to detect game win or lose
+    def GameOver(self):
+        if (self.listCreatMonster[self.nOrder][2] == 0
+            and len(self.listMonsterIndex) <= 0):
+            self.bGameWin = True
+
+        if self.nLife <= 0:
+            self.bGameOver = True
+
+        return self.bGameWin or self.bGameOver
 
 ##start to build or update tower
     def MouseButtonDown(self,event):
-        print self.dictTowerIndex
+
+        ## Game over break
+        if self.GameOver():
+            return
 
         clickPoint =  (event.pos[0] // 64, event.pos[1] // 64)
         
@@ -259,9 +286,8 @@ class CStageGame(CStage):
         
         for bullet in self.dictBulletindex:
             if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
-                target = (self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos[0] + 32,
-                          self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos[1] + 32)
-                self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime, target)
+                self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime,
+                    self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos)
             else:
                 self.myObjManger.dictObject[bullet].bBomb = True
 
