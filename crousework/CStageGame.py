@@ -23,7 +23,7 @@ class CStageGame(CStage):
         self.typeUpgrade ={1:4,2:5,4:4,5:5}
         
         self.GameInit()
-        ##self.MusicInit(sound)
+        #self.MusicInit(sound)
 
     ## game date init
     def GameInit(self):

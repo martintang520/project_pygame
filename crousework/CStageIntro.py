@@ -14,10 +14,16 @@ class CStageIntro(CStage):
 
 
     def GameInit(self):
+        self.nIntroIndex = self.myObjManger.CreateObjectNode((0, 0, 0), (0,0),
+                                            (960,640), "picture/instruction.png")
+
+
         self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0), (800, 500),
                                             (100,100), "picture/OKButton1.png")
 
+        self.Intro = self.myObjManger.GetObject(self.nIntroIndex)
         self.butOK = self.myObjManger.GetObject(self.nOKIndex)
+
 
         
     def Update(self, deltaTime):
