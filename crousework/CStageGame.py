@@ -61,7 +61,6 @@ class CStageGame(CStage):
         self.SoundDeath = sound[0]
         self.SoundGold = sound[1]
         self.SoundExplore = sound[2]
-        print self.SoundDeath.soundState()
         self.SoundDeath.play(1)
         self.SoundGold.play(1)
         self.SoundExplore.play(1)
@@ -199,7 +198,7 @@ class CStageGame(CStage):
                                      self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
                         self.nMoney = self.nMoney -100
                     else:
-                        if self.SoundDeath.soundState():
+                        if self.SoundGold.soundState():
                             self.SoundGold.play(1)
                 self.DeleteIndex()
                     
@@ -218,9 +217,19 @@ class CStageGame(CStage):
                             self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
                             self.nMoney = self.nMoney -100
                         else:
-                            if self.SoundDeath.soundState():
+                            if self.SoundGold.soundState():
                                 self.SoundGold.play(1)
                 self.DeleteIndex()
+
+    def MouseMotion(self,event):
+        
+        if self.GameOver():
+            if self.myObjManger.HaveKey(self.nOKIndex):
+                if self.myObjManger.dictObject[self.nOKIndex].OnButton(event):
+                    self.myObjManger.dictObject[self.nOKIndex].SetImage("picture/OKButton2.png")
+                else :
+                    self.myObjManger.dictObject[self.nOKIndex].SetImage("picture/OKButton1.png")
+            
 
     ##build tower
     def Build(self,event):
@@ -352,6 +361,8 @@ class CStageGame(CStage):
 
         for monster in self.listMonsterIndex:
             if self.myObjManger.dictObject[monster].nHP <=0:
+                if self.SoundDeath.soundState():
+                            self.SoundDeath.play(1)
                 key = monster
                 break
 
@@ -366,6 +377,8 @@ class CStageGame(CStage):
                     newExplosion = self.myObjManger.CreateExplosionNode((0, 0, 0),
                         explosionPos, (896, 64),"picture/explosion.png", 64, 14)
                     self.listExplosionIndex.append(newExplosion)
+                    if self.SoundExplore.soundState():
+                            self.SoundExplore.play(1)
                     
                     self.listBuildingIndex.remove(building)
                     self.myObjManger.DeleteObjectNode(building)
