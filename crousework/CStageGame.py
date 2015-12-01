@@ -40,6 +40,7 @@ class CStageGame(CStage):
         self.fInterval = 0.
         self.fGap = 0.
         self.listMonsterIndex = []
+        self.listExplosionIndex = []
         self.dictBulletindex = {} ## bullet list
         self.listCreatMonster = [(0, 5, 5), (0, 3, 3), (1, 3, 5), (0, 0, 0)]
         self.dictMonsterType = {0:StuProperty(1, 20, 1.5, "picture/monster1.png",
@@ -51,9 +52,6 @@ class CStageGame(CStage):
         self.bGameWin = False
         self.bGameOver = False
         self.nLife = 10
-
-        self.myObjManger.CreateExplosionNode((0, 0, 0), (0, 0), (896, 64),
-                        "picture/explosion.png", 64, 14)
 
 
     def MusicInit(self, sound):
@@ -76,6 +74,7 @@ class CStageGame(CStage):
         self.bulletMovement(deltaTime)
         self.RemoveBullet()
         self.RemoveMonster()
+        self.RemoveExplosion()
 
     
     def Render(self, deltaTime):
@@ -332,15 +331,33 @@ class CStageGame(CStage):
                 
                 ## demolish one building
                 for building in self.listBuildingIndex:
+
+                    explosionPos = self.myObjManger.dictObject[building].tulPos
+                    newExplosion = self.myObjManger.CreateExplosionNode((0, 0, 0),
+                        explosionPos, (896, 64),"picture/explosion.png", 64, 14)
+                    self.listExplosionIndex.append(newExplosion)
+                    
                     self.listBuildingIndex.remove(building)
                     self.myObjManger.DeleteObjectNode(building)
+                                        
                     break
                     
 
         if key != -1:
             self.listMonsterIndex.remove(key)
             self.myObjManger.DeleteObjectNode(key)
-                
+
+
+    def RemoveExplosion(self):
+
+        key = -1
+        
+        for explosion in self.listExplosionIndex:
+            if self.myObjManger.dictObject[explosion].bFinish == True:
+                key = explosion
+                self.listExplosionIndex.remove(key)
+                self.myObjManger.DeleteObjectNode(key)
+                break              
 
 
 
