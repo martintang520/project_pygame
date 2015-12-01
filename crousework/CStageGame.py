@@ -207,6 +207,7 @@ class CStageGame(CStage):
                         self.dictTowerType.pop(self.tulCurrentPoint)
                         self.myGameMap.DeleteTower(self.nMapNumber, self.tulCurrentPoint)
                         self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),0)
+                        self.nMoney += 50
                     elif self.UpgradeDecision(event,self.currentTower)==2:
                         if self.nMoney >= 100:
                             self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
