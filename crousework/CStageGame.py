@@ -20,8 +20,8 @@ class CStageGame(CStage):
         self.currentTower=[]
 
         #self.Position=[]
-        self.typeUpgrade =[(1,4),(2,5),(3,6),(4,7),(5,8),(6,9),(7,7),(8,8),(9,9)]
-
+        self.typeUpgrade ={1:4,2:5,4:4,5:5}
+        
         self.GameInit()
         ##self.MusicInit(sound)
 
@@ -164,7 +164,7 @@ class CStageGame(CStage):
                     self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
                     self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
                                                                    (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
-                                                                   (64,64), "picture/tower"+str(self.BuildDecision(event,self.currentTower)+1)+".png",self.BuildDecision(event,self.currentTower)+1),
+                                                                   (64,64),  self.BuildDecision(event,self.currentTower)+1),
                                  self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
                 self.DeleteIndex()
                     
@@ -176,28 +176,21 @@ class CStageGame(CStage):
                         self.dictTowerIndex.pop(self.tulCurrentPoint)
                         self.dictTowerType.pop(self.tulCurrentPoint)
                         self.myGameMap.DeleteTower(self.nMapNumber, self.tulCurrentPoint)
-                        self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),
-                                                           "picture/blank.png",0)
+                        self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),0)
                     elif self.UpgradeDecision(event,self.currentTower)==2:
-                        self.deleteBuild(self.dictTowerIndex[self.tulCurrentPoint])
-                        self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),
-                                                                        "picture/tower"+str(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]-1][1])+".png",self.dictTowerType[self.tulCurrentPoint]),
-                                      self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]-1][1],self.tulCurrentPoint)
-  
+                        self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
+                        
                 self.DeleteIndex()
 
     ##build tower
     def Build(self,event):
 
         ntower1=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
-                                                                       (64,64), "picture/tower1.png",1)
+                                                                       (64,64),1)
         ntower2=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)+64,self.GetPointTop(event.pos)),
-                                                                       (64,64), "picture/tower2.png",2)
-        ntower3=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)-64,self.GetPointTop(event.pos)),
-                                                                       (64,64), "picture/tower3.png",3)
+                                                                       (64,64),2)
         self.AddNewIndex(ntower1)
         self.AddNewIndex(ntower2)
-        self.AddNewIndex(ntower3)
 
     def BuildDecision(self, event, tower):
         
@@ -217,11 +210,9 @@ class CStageGame(CStage):
     ##update tower
     def Upgrade(self,event):
         self.AddNewIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
-                                                           (64,64), "picture/cross.png",-1))
+                                                           (64,64),-1))
         self.AddNewIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos)+64,self.GetPointTop(event.pos)),(64,64),
-                                                           "picture/tower"+str(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]-1][1])+".png",self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]-1][1]))          
-
-
+                                                           self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]]))
     ## for build or upgrade
     def AddNewIndex(self,index):
 

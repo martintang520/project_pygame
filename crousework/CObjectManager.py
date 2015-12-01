@@ -41,8 +41,8 @@ class CObjectManager():
         return self.index - 1
 
     
-    def CreateTowerNode(self, color, pos, size, pirtureName,rangeTower):
-        newObject = CTower(color, pos, size, pirtureName,rangeTower)
+    def CreateTowerNode(self, color, pos, size, TowerType):
+        newObject = CTower(color, pos, size, TowerType)
         self.dictObject[self.index] = newObject
         self.index += 1
 
