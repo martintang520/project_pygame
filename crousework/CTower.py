@@ -16,6 +16,7 @@ class CTower(CButton):
         CObject.__init__(self, color, initialPos, size, pictureName)
 
         self.nTowerType=Towertype
+        print Towertype
         self.attacktimer = 2
         self.GameInit()
 

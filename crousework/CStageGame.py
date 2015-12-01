@@ -116,7 +116,6 @@ class CStageGame(CStage):
                     self.dictMonsterType[self.listCreatMonster[self.nOrder][0]]))
                 self.listMonsterIndex.append(monsterIndex)
                 self.nMonsterNumber += 1
-                print self.nMonsterNumber
                 self.fGap = 0
             else:
                 self.fGap += deltaTime
@@ -286,7 +285,8 @@ class CStageGame(CStage):
         newBullet = self.myObjManger.CreateBulletNode((0, 0, 0),
             self.myObjManger.dictObject[towerIndex].tulPos, (64, 64), "picture/bullet.png")
         self.dictBulletindex[newBullet] = (monsterIndex, towerIndex)
-
+        self.myObjManger.dictObject[newBullet].nAttackPoint = self.myObjManger.dictObject[towerIndex].nAttackPoint
+        print self.myObjManger.dictObject[newBullet].nAttackPoint
 
     def bulletMovement(self,deltaTime):
         
@@ -306,8 +306,7 @@ class CStageGame(CStage):
             if self.myObjManger.dictObject[bullet].bBomb == True:
                 if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
                     self.myObjManger.dictObject[(self.dictBulletindex[bullet][0]
-                        )].nHP -= (self.myObjManger.dictObject[
-                        self.dictBulletindex[bullet][1]].nAttackPoint)
+                        )].nHP -= (self.myObjManger.dictObject[bullet].nAttackPoint)
                 key = bullet
                 break
 

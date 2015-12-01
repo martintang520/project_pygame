@@ -13,6 +13,9 @@ class CBullet(CObject):
              CObject.__init__(self,color, initialPos, size, pictureName)
              self.bDecide = True
              self.bBomb = False
+             self.nAttackPoint = 0
+
+             
              self.tupMonsterSpeed = [0,0]
              self.nBulletSpeed = 0
              self.nMonsterSpeed = 0
