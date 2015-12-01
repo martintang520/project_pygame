@@ -43,6 +43,9 @@ class CMonster(CObject):
         self.tupNext = (0,0)
         self.bchangeDirection = False ##Change Frame picture
 
+        ## suicide attack
+        self.bSuicideAttack = False
+
 
     def DataInit(self, monsterProperty):
         ##self.image = pygame.image.load(monsterProperty.strPictureName, 
@@ -114,6 +117,8 @@ class CMonster(CObject):
     def CanPass(self, pos):
         if self.listMap[pos[1]][pos[0]] == 1:
             return True
+        elif self.listMap[pos[1]][pos[0]] == 5:
+            self.bSuicideAttack = True
         else:
             return False
         

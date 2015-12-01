@@ -40,16 +40,12 @@ class CStageGame(CStage):
         self.fInterval = 0.
         self.fGap = 0.
         self.listMonsterIndex = []
+        self.dictBulletindex = {} ## bullet list
         self.listCreatMonster = [(0, 5, 5), (0, 3, 3), (1, 3, 5), (0, 0, 0)]
         self.dictMonsterType = {0:StuProperty(1, 20, 1.5, "picture/monster1.png",
                                             (0,1), self.listMap),
                                 1:StuProperty(2, 20, 1., "picture/monster2.png",
                                             (0,1), self.listMap)}
-        
-        self.MonsterIndex = self.myObjManger.CreateMonsterNode((0, 0, 0), (0, 64),
-                          self.surface.get_size(), self.dictMonsterType[0])
-
-        self.dictBulletindex = {}
 
         ## game over
         self.bGameWin = False
@@ -84,6 +80,7 @@ class CStageGame(CStage):
 
         
     def DrawMap(self):
+        self.listBuildingIndex = [] ## building list
         categoryPicture = {
             1 : "picture/path.png",
             2 : "picture/tree.png",
@@ -96,8 +93,11 @@ class CStageGame(CStage):
                 if self.listMap[y][x] == 0 or self.listMap[y][x] == 5:
                     continue
                 else:
-                    self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
+                    mapIndex = self.myObjManger.CreateObjectNode((0, 0, 0), (x * 64, y * 64),
                                  (64, 64), categoryPicture[self.listMap[y][x]])
+                    if self.listMap[y][x] == 3:  ## record building list
+                        self.listBuildingIndex.append(mapIndex)
+                        
         self.myObjManger.CreateObjectNode((0, 0, 0), (8 * 64, 2 * 64),
                                  (128, 128), "picture/EiffelTower.png")
                     
@@ -322,6 +322,17 @@ class CStageGame(CStage):
             if self.myObjManger.dictObject[monster].nHP <=0:
                 key = monster
                 break
+
+            if self.myObjManger.dictObject[monster].bSuicideAttack == True:
+                key = monster
+                self.nLife -= 1
+                
+                ## demolish one building
+                for building in self.listBuildingIndex:
+                    self.listBuildingIndex.remove(building)
+                    self.myObjManger.DeleteObjectNode(building)
+                    break
+                    
 
         if key != -1:
             self.listMonsterIndex.remove(key)
