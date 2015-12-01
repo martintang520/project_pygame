@@ -1,10 +1,12 @@
 import pygame
 from pygame.locals import *
 from CObject import *
+from CObjectAnimation import *
 from CButton import *
 from CTower import *
 from CMonster import *
 from CBullet import *
+from CExplosion import *
 
 
 class CObjectManager():
@@ -55,6 +57,24 @@ class CObjectManager():
 
     def CreateBulletNode(self, color, pos, size, pirtureName):
         newObject = CBullet(color, pos, size, pirtureName)
+        self.dictObject[self.index] = newObject
+        self.index += 1
+
+        return self.index - 1
+
+    def CreateObjectAnimationNode(self, color, initialPos, size, pictureName,
+                                  width, farmeNumber):
+        newObject = CObjectAnimation(color, initialPos, size, pictureName,
+                                  width, farmeNumber)
+        self.dictObject[self.index] = newObject
+        self.index += 1
+
+        return self.index - 1
+
+    def CreateExplosionNode(self, color, initialPos, size, pictureName,
+                                  width, farmeNumber):
+        newObject = CExplosion(color, initialPos, size, pictureName,
+                                  width, farmeNumber)
         self.dictObject[self.index] = newObject
         self.index += 1
 

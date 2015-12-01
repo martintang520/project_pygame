@@ -52,6 +52,9 @@ class CStageGame(CStage):
         self.bGameOver = False
         self.nLife = 10
 
+        self.myObjManger.CreateExplosionNode((0, 0, 0), (0, 0), (896, 64),
+                        "picture/explosion.png", 64, 14)
+
 
     def MusicInit(self, sound):
         self.Sound = sound
