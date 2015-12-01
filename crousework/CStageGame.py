@@ -139,7 +139,9 @@ class CStageGame(CStage):
             
             if (self.listCreatMonster[self.nOrder][2] == 0
                 and len(self.listMonsterIndex) <= 0):
-                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 361) / 2, (640 - 50) / 2),
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 550) / 2, (640 - 366) / 2),
+                    self.surface.get_size(), "picture/background2.png")
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 361) / 2, (640 - 100) / 2),
                     self.surface.get_size(), "picture/YouWin.png")
                 ##return button
                 self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0),
@@ -148,7 +150,9 @@ class CStageGame(CStage):
                 self.bGameWin = True
 
             if self.nLife <= 0:
-                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 447) / 2, (640 - 51) / 2),
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 550) / 2, (640 - 366) / 2),
+                    self.surface.get_size(), "picture/background2.png")
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 447) / 2, (640 - 100) / 2),
                     self.surface.get_size(), "picture/GameOver.png")
                 ##return button
                 self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0),
