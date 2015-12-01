@@ -6,7 +6,7 @@ from CMap import *
 
 class CStageGame(CStage):
     
-    def __init__(self, surface):
+    def __init__(self, surface,sound):
         self.surface = surface
         self.myGameMap = CMap()
         self.myObjManger = CObjectManager()
@@ -25,7 +25,7 @@ class CStageGame(CStage):
         self.typeUpgrade ={1:4,2:5,4:4,5:5}
         
         self.GameInit()
-        #self.MusicInit(sound)
+        self.MusicInit(sound)
 
     ## game date init
     def GameInit(self):
@@ -58,9 +58,13 @@ class CStageGame(CStage):
 
 
     def MusicInit(self, sound):
-        self.Sound = sound
-        self.boolSound = self.Sound.soundState()
-        self.Sound.play(1)
+        self.SoundDeath = sound[0]
+        self.SoundGold = sound[1]
+        self.SoundExplore = sound[2]
+        print self.SoundDeath.soundState()
+        self.SoundDeath.play(1)
+        self.SoundGold.play(1)
+        self.SoundExplore.play(1)
         
     def Update(self,deltaTime):
 
@@ -193,9 +197,10 @@ class CStageGame(CStage):
                                                                        (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
                                                                        (64,64),  self.BuildDecision(event,self.currentTower)+1),
                                      self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
-                    self.nMoney = self.nMoney -100
-                else:
-                    print 'More gold is required'
+                        self.nMoney = self.nMoney -100
+                    else:
+                        if self.SoundDeath.soundState():
+                            self.SoundGold.play(1)
                 self.DeleteIndex()
                     
             elif self.myGameMap.IsTower(self.nMapNumber, self.tulCurrentPoint):
@@ -212,8 +217,9 @@ class CStageGame(CStage):
                         if self.nMoney >= 100:
                             self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
                             self.nMoney = self.nMoney -100
-                    else:
-                        print 'More gold is required'
+                        else:
+                            if self.SoundDeath.soundState():
+                                self.SoundGold.play(1)
                 self.DeleteIndex()
 
     ##build tower

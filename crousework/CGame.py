@@ -66,14 +66,16 @@ class CGame():
         self.surface.blit(MouseCursor, (x, y))
 
     def GameInit(self):
-        ##self.MusicInit()
+        self.MusicInit()
         CGame.myCStage = CStageStart(self.surface)
         
     def MusicInit(self):
         self.musicVoice = music("2.mp3")
-        self.soundVoice = sound("1.wav")
+        self.soundVoice = []
+        self.soundVoice = self.soundVoice+[sound("1.wav")]
+        self.soundVoice = self.soundVoice+[sound("2.wav")]
+        self.soundVoice = self.soundVoice+[sound("3.wav")]
         self.musicVoice.play(0)
-        
 
     def GameUpdate(self, deltaTime):
         self.ChangeState(); ## check and change stage
@@ -104,7 +106,7 @@ class CGame():
             if CGame.nState == 1:
                 CGame.myCStage = CStageStart(self.surface)
             elif CGame.nState == 2:
-                CGame.myCStage = CStageGame(self.surface)
+                CGame.myCStage = CStageGame(self.surface,self.soundVoice)
             elif CGame.nState == 3:
                 CGame.myCStage = CStageSet(self.surface,self.musicVoice,self.soundVoice)
             elif CGame.nState == 5:

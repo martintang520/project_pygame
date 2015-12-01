@@ -107,10 +107,14 @@ class CStageSet(CStage):
     def Play(self):
         if self.boolMusic:
             self.musicVoice.play(0)
-            print 2
+            self.soundVoice[0].State = True
+            self.soundVoice[1].State = True
+            self.soundVoice[2].State = True
         else:
             self.musicVoice.pause()
-            print 3
+            self.soundVoice[0].State = False
+            self.soundVoice[1].State = False
+            self.soundVoice[2].State = False
 
 ##turn up or down the Volumn of music and sound
     def VolumnDecision(self,event):
@@ -130,7 +134,9 @@ class CStageSet(CStage):
 
     def Volume(self):
         self.musicVoice.setvolumn(self.nVolumn)
-        self.soundVoice.setvolumn(self.nVolumn)
+        self.soundVoice[0].setvolumn(self.nVolumn)
+        self.soundVoice[1].setvolumn(self.nVolumn)
+        self.soundVoice[2].setvolumn(self.nVolumn)
             
     def MouseMotion(self, event):
         self.MotionDecision(event)
