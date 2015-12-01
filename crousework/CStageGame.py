@@ -54,6 +54,7 @@ class CStageGame(CStage):
         self.bGameWin = False
         self.bGameOver = False
         self.nLife = 10
+        self.nOKIndex = -1
 
 
     def MusicInit(self, sound):
@@ -130,22 +131,41 @@ class CStageGame(CStage):
             else:
                 self.fInterval += deltaTime
 
+
     ## to detect game win or lose
     def GameOver(self):
-        if (self.listCreatMonster[self.nOrder][2] == 0
-            and len(self.listMonsterIndex) <= 0):
-            self.bGameWin = True
+        
+        if not (self.bGameWin or self.bGameOver):
+            
+            if (self.listCreatMonster[self.nOrder][2] == 0
+                and len(self.listMonsterIndex) <= 0):
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 361) / 2, (640 - 50) / 2),
+                    self.surface.get_size(), "picture/YouWin.png")
+                ##return button
+                self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0),
+                    ((960 - 100) / 2, (640 - 100) / 2 + 100),(100,100), "picture/OKButton1.png")
 
-        if self.nLife <= 0:
-            self.bGameOver = True
+                self.bGameWin = True
+
+            if self.nLife <= 0:
+                self.myObjManger.CreateObjectNode((0, 0, 0), ((960 - 447) / 2, (640 - 51) / 2),
+                    self.surface.get_size(), "picture/GameOver.png")
+                ##return button
+                self.nOKIndex = self.myObjManger.CreateButtonNode((0, 0, 0),
+                    ((960 - 100) / 2, (640 - 100) / 2 + 100),(100,100), "picture/OKButton1.png")
+                self.bGameOver = True
 
         return self.bGameWin or self.bGameOver
+    
 
 ##start to build or update tower
     def MouseButtonDown(self,event):
-        print self.nMoney
+        
         ## Game over break
         if self.GameOver():
+            if self.myObjManger.HaveKey(self.nOKIndex):
+                if self.myObjManger.dictObject[self.nOKIndex].OnButton(event):
+                    CStage.SetStage(1)
             return
 
         clickPoint =  (event.pos[0] // 64, event.pos[1] // 64)
