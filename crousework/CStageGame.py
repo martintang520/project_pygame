@@ -19,6 +19,8 @@ class CStageGame(CStage):
         self.currentIndex=[]
         self.currentTower=[]
 
+        self.nMoney=200
+        
         #self.Position=[]
         self.typeUpgrade ={1:4,2:5,4:4,5:5}
         
@@ -141,7 +143,7 @@ class CStageGame(CStage):
 
 ##start to build or update tower
     def MouseButtonDown(self,event):
-
+        print self.nMoney
         ## Game over break
         if self.GameOver():
             return
@@ -161,11 +163,15 @@ class CStageGame(CStage):
             self.unBuild()
             if self.myGameMap.IsBlank(self.nMapNumber, self.tulCurrentPoint):
                 if self.BuildDecision(event,self.currentTower) !=-1:
-                    self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
-                    self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
-                                                                   (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
-                                                                   (64,64),  self.BuildDecision(event,self.currentTower)+1),
-                                 self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
+                    if self.nMoney >= 100:
+                        self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
+                        self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
+                                                                       (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
+                                                                       (64,64),  self.BuildDecision(event,self.currentTower)+1),
+                                     self.BuildDecision(event,self.currentTower)+1,self.tulCurrentPoint)
+                    self.nMoney = self.nMoney -100
+                else:
+                    print 'More gold is required'
                 self.DeleteIndex()
                     
             elif self.myGameMap.IsTower(self.nMapNumber, self.tulCurrentPoint):
@@ -178,8 +184,11 @@ class CStageGame(CStage):
                         self.myGameMap.DeleteTower(self.nMapNumber, self.tulCurrentPoint)
                         self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),0)
                     elif self.UpgradeDecision(event,self.currentTower)==2:
-                        self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
-                        
+                        if self.nMoney >= 100:
+                            self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
+                            self.nMoney = self.nMoney -100
+                    else:
+                        print 'More gold is required'
                 self.DeleteIndex()
 
     ##build tower

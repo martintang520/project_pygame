@@ -12,7 +12,7 @@ class CMap():
         pass
 
     def InitMap(self):
-        CMap.listMapGroup += [self.XMLreader.Read(0)]
+        CMap.listMapGroup = [self.XMLreader.Read(0)]
 
 
     def IsBlank(self, mapNumber, index):
