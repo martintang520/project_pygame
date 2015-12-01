@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import*
-##from ball import *
 from CStageStart import *
 from CStageGame import *
 from CStageSet import *
@@ -19,10 +18,10 @@ class CGame():
         self.font = pygame.font.SysFont("Arial",20)  ## Font
         
         if nFps > 0:
-            self.nFixedDeltaTime = 1000 / nFps
+            self.nFixedDeltaTime = 1000 / nFps  ## fix maximum frame
         else:
             self.nFixedDeltaTime = 0
-        self.fRecordClock = pygame.time.get_ticks()
+        self.fRecordClock = pygame.time.get_ticks() ## record current time
 
         self.GameInit()
 
@@ -33,14 +32,14 @@ class CGame():
         fDeltaTime = 0.
         while True:
             fDeltaTime = pygame.time.get_ticks() - self.fRecordClock
-            if fDeltaTime > 1:
+            if fDeltaTime > 1: ## ensuring deltaTime at least have one millisecond
                 break
 
         if fDeltaTime > self.nFixedDeltaTime:  ## next frame
             self.fRecordClock = pygame.time.get_ticks()
 
             fMyDeltaTime = fDeltaTime / 1000. ## real time between two frames
-            self.GameUpdate(fMyDeltaTime)
+            self.GameUpdate(fMyDeltaTime) ## update all object
             self.Render(fMyDeltaTime) ## render all object
             self.fTime += fMyDeltaTime
 
@@ -72,9 +71,9 @@ class CGame():
     def MusicInit(self):
         self.musicVoice = music("2.mp3")
         self.soundVoice = []
-        self.soundVoice = self.soundVoice+[sound("1.wav")]
-        self.soundVoice = self.soundVoice+[sound("2.wav")]
-        self.soundVoice = self.soundVoice+[sound("3.wav")]
+        self.soundVoice = self.soundVoice + [sound("1.wav")]
+        self.soundVoice = self.soundVoice + [sound("2.wav")]
+        self.soundVoice = self.soundVoice + [sound("3.wav")]
         self.musicVoice.play(0)
 
     def GameUpdate(self, deltaTime):
@@ -90,15 +89,17 @@ class CGame():
 
 
     def EventListener(self, event):
+        ##mouse down event
         if event.type == MOUSEBUTTONDOWN:
             CGame.myCStage.MouseButtonDown(event)
-            print "click"
+        ##mouse move event
         elif event.type == MOUSEMOTION:
             CGame.myCStage.MouseMotion(event)
-            pass
+        ##key down event
         elif event.type == KEYDOWN:
-            print "key"
+            pass
 
+    ## change stage
     def ChangeState(self):
         
         if CGame.myCStage.GetStageState() != CGame.nState:
@@ -111,7 +112,3 @@ class CGame():
                 CGame.myCStage = CStageSet(self.surface,self.musicVoice,self.soundVoice)
             elif CGame.nState == 5:
                 CGame.myCStage = CStageIntro(self.surface)
-
-    ##@staticmethod
-    ##def SetState(state):
-##        nState = state

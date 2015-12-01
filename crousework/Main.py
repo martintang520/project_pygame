@@ -14,7 +14,9 @@ while True :
     pygame.display.update()
     
     event = pygame.event.poll()
-    gGame.EventListener(event)
+    gGame.EventListener(event)  ## listen event
+    
+    ## State 4 is exit
     if event.type == pygame.QUIT or CGame.myCStage.GetStageState()==4:
         break
 
