@@ -26,7 +26,7 @@ class CStage():
     @staticmethod
     def SetStage(state):
         CStage.nStage = state
-        print CStage.nStage
+
 
     @staticmethod
     def GetStageState():
