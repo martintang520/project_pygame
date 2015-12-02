@@ -53,10 +53,10 @@ class music:
               pygame.mixer.music.stop()
               self.State = False
        #function set music volumn, c beween 0-1#      
-       def setvolumn(self,nvolumn):
-              self.nvolumn=nvolumn
-              nvolumn=nvolumn/100.0
-              pygame.mixer.music.set_volume(nvolumn)
+       def setvolumn(self,volumn):
+              self.nVolumn=volumn
+              self.nVolumn=volumn/100.0
+              pygame.mixer.music.set_volume(self.nVolumn)
        #return music state#
        def musicState(self):
               return self.State
