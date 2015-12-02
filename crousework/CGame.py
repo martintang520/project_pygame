@@ -52,11 +52,11 @@ class CGame():
                 nFps = self.nFrames / self.fTime  ## frames in the game
                 self.surface.blit(self.font.render("FPS : {} ".format(int(nFps)),1,
                                                pygame.color.THECOLORS["white"]),(0,0))
-            self.MouseUpdate() #update the mouse
+            self.MouseUpdate() #update the mouse Cursor
 
-    #update the mouse
+    #update the mouse Cursor
     def MouseUpdate(self):
-        UrlMouseImage = 'picture/mouse.gif'   #the image of mouse
+        UrlMouseImage = 'picture/mouse.gif'
         MouseCursor = pygame.image.load(UrlMouseImage).convert_alpha()
         x, y = pygame.mouse.get_pos()
         pygame.mouse.set_visible(False)

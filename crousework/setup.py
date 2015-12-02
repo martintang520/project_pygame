@@ -1,26 +1,20 @@
 import cx_Freeze
-# executables = [cx_Freeze.Executable("test1.py",,
-#      icon="Icon.ico")]
-# cx_Freeze.setup(
-# 	name="Town",
-# 	options={"build_exe":{"packages":["pygame"]}},
-# 	description ="Project",
-# 	executables = executables
-# 	)
+
+# using cxfreeze
 
 exe = cx_Freeze.Executable(
         script = "Main.py",
-        icon = "C:\Users\Martin\Dropbox\Nottingham\sem1\Programming\project_pygame\crousework\picture\icon1.ico",
-        # targetName = "Town.exe",
+        icon = "picture/icon1.ico",
+        # targetName = "Defense of Paris.exe",
 
         )
-includefiles = ['C:\Users\Martin\Dropbox\Nottingham\sem1\Programming\project_pygame\crousework\picture']
+includefiles = ['picture','music','sound','map.xml']
 
 cx_Freeze.setup(
-    name = "Town game",
-    version = "0.1",
+    name = "Defense of Paris",
+    version = "1.0",
     description = "Converts Binary values to Decimal values",
-    author = "Martin",
+    author = "Arthas Group",
     options = {'build_exe': {"packages":["pygame"],'include_files':includefiles}},
     executables = [exe]
 )

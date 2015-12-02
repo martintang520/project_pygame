@@ -348,22 +348,23 @@ class CStageGame(CStage):
 ## finish to build or update
 
 
-#Each town detects all of the monsters
+    #Each town can detects all of the monsters with using a equation of a Circle
     def detection(self,deltaTime):
 
-        for k in self.dictTowerIndex:
-            for j in self.listMonsterIndex:
-                oTowner = self.myObjManger.dictObject[self.dictTowerIndex[k]]
-                oMonster =self.myObjManger.dictObject[j]
+        for tower in self.dictTowerIndex:
+            for monster in self.listMonsterIndex:
+                oTowner = self.myObjManger.dictObject[self.dictTowerIndex[tower]]
+                oMonster =self.myObjManger.dictObject[monster]
                 
                 attackTime = oTowner.attacktimer
+                # If the towner can dectect a monster, it will excute bulletAttack()
                 if ((oMonster.tulPos[0] - oTowner.tulPos[0] + 32) ** 2 +
                          (oMonster.tulPos[1] - oTowner.tulPos[1] - 32) ** 2 <= oTowner.rangeTower ** 2 
                           and attackTime > 2):
-                    self.myObjManger.dictObject[self.dictTowerIndex[k]].attacktimer = 0
-                    self.bulletAttack(self.dictTowerIndex[k], j)
+                    self.myObjManger.dictObject[self.dictTowerIndex[tower]].attacktimer = 0
+                    self.bulletAttack(self.dictTowerIndex[tower], monster)
 
-
+    #Generate a bullet
     def bulletAttack(self, towerIndex, monsterIndex):
 
         newBullet = self.myObjManger.CreateBulletNode((0, 0, 0),
@@ -376,22 +377,25 @@ class CStageGame(CStage):
         if towerType == 2 or towerType == 5:
             self.myObjManger.dictObject[newBullet].nAttackType = 1 
 
+    # the movement of bullet
     def bulletMovement(self,deltaTime):
         
         for bullet in self.dictBulletindex:
+            #the target exist or not
             if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
                 self.myObjManger.dictObject[bullet].MoveUpdate(deltaTime,
                     self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].tulPos)
             else:
                 self.myObjManger.dictObject[bullet].bBomb = True
 
-
+    #removw the bullet
     def RemoveBullet(self):
 
         key = -1
         
         for bullet in self.dictBulletindex:
             if self.myObjManger.dictObject[bullet].bBomb == True:
+                # hp
                 if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
                     self.myObjManger.dictObject[(self.dictBulletindex[bullet][0]
                         )].nHP -= (self.myObjManger.dictObject[bullet].nAttackPoint)
@@ -402,29 +406,32 @@ class CStageGame(CStage):
                     
                 key = bullet
                 break
-
+        # remove bullet
         if self.dictBulletindex.has_key(key):
             self.dictBulletindex.pop(key)
             self.myObjManger.DeleteObjectNode(key)
 
-
+    # remove the monster
     def RemoveMonster(self):
 
         key = -1
-
+        # When the monster die
         for monster in self.listMonsterIndex:
             if self.myObjManger.dictObject[monster].nHP <=0:
+                # play the effect sound
                 if self.SoundDeath.soundState():
                             self.SoundDeath.play(1)
+                # earn money
                 self.nMoney += 20
                 key = monster
                 break
 
+            # a monster arrives the Eiffel Tower
             if self.myObjManger.dictObject[monster].bSuicideAttack == True:
                 key = monster
                 self.nLife -= 1
                 
-                ## demolish one building
+                ## demolish one building(life)
                 for building in self.listBuildingIndex:
 
                     explosionPos = self.myObjManger.dictObject[building].tulPos
@@ -444,7 +451,7 @@ class CStageGame(CStage):
             self.listMonsterIndex.remove(key)
             self.myObjManger.DeleteObjectNode(key)
 
-
+    # remove the ecplosion
     def RemoveExplosion(self):
 
         key = -1
@@ -454,7 +461,7 @@ class CStageGame(CStage):
                 key = explosion
                 self.listExplosionIndex.remove(key)
                 self.myObjManger.DeleteObjectNode(key)
-                break              
+                break             
 
 
 
