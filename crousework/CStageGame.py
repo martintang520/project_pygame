@@ -1,3 +1,4 @@
+# -*- coding: cp936 -*-
 import pygame
 from pygame.locals import*
 from CStage import *
@@ -61,9 +62,6 @@ class CStageGame(CStage):
         self.SoundDeath = sound[0]
         self.SoundGold = sound[1]
         self.SoundExplore = sound[2]
-        self.SoundDeath.play(1)
-        self.SoundGold.play(1)
-        self.SoundExplore.play(1)
         
     def Update(self,deltaTime):
 
@@ -109,7 +107,7 @@ class CStageGame(CStage):
         self.myObjManger.CreateObjectNode((0, 0, 0), (8 * 64, 2 * 64),
                                  (128, 128), "picture/EiffelTower.png")
                     
-    ##create monster in update
+    #create monster in update
     def MonsterCreater(self, deltaTime):
         if self.listCreatMonster[self.nOrder][2] == 0:
             return
@@ -135,7 +133,7 @@ class CStageGame(CStage):
                 self.fInterval += deltaTime
 
 
-    ## to detect game win or lose
+    # to detect game win or lose
     def GameOver(self):
         
         if not (self.bGameWin or self.bGameOver):
@@ -165,7 +163,7 @@ class CStageGame(CStage):
         return self.bGameWin or self.bGameOver
     
 
-##start to build or update tower
+    #start to build or update tower
     def MouseButtonDown(self,event):
         
         ## Game over break
@@ -176,22 +174,33 @@ class CStageGame(CStage):
             return
 
         clickPoint =  (event.pos[0] // 64, event.pos[1] // 64)
-        
+#player can build the tower by two mouse operations
+#first click is to open the list of towers
+#second click, after chosen, to build the chosen tower on blank
+#self.boolIsBuild is to judge the state of click state,true means first click
+#false means second click
         if self.boolIsBuild:
             self.boolIsBuild=False
+            # get the blank of click position like(7,2) the total mape is a 15*10 metrix 
             self.tulCurrentPoint = self.GetPoint(event.pos)
-            
+            # if the click place is blank ,that means it can put a tower, else the place
+            # is on tower, that means it can upgrade this tower
+            # all situations can show a list of the build option 
             if self.myGameMap.IsBlank(self.nMapNumber, clickPoint):
                 self.Build(event)
             elif self.myGameMap.IsTower(self.nMapNumber, clickPoint):
                 self.Upgrade(event)
         else:
             self.boolIsBuild=True
-            self.unBuild()
+            self.unBuild()#close the list of tower
             if self.myGameMap.IsBlank(self.nMapNumber, self.tulCurrentPoint):
+            # the current mouse click is on a blank box so the player can build a tower
                 if self.BuildDecision(event,self.currentTower) !=-1:
+                #-1 means player click other place to close the list
                     if self.nMoney >= 100:
-                        self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)
+                    #nMoney is current money
+                        #build a tower and add the index of tower to the index dictionary
+                        self.myGameMap.BuildTower(self.nMapNumber, self.tulCurrentPoint)             
                         self.AddIndex(self.myObjManger.CreateTowerNode((0, 0, 0),
                                                                        (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),
                                                                        (64,64),  self.BuildDecision(event,self.currentTower)+1),
@@ -199,28 +208,35 @@ class CStageGame(CStage):
                         self.nMoney = self.nMoney -100
                     else:
                         if self.SoundGold.soundState():
-                            self.SoundGold.play(1)
-                self.DeleteIndex()
+                            self.SoundGold.play(1) # if the money is not enough and the soundstate is opened ,play sound1
+                self.DeleteIndex()#clean the current index
                     
             elif self.myGameMap.IsTower(self.nMapNumber, self.tulCurrentPoint):
+            #the mouse click is on a exist tower
                 if self.UpgradeDecision(event,self.currentTower)!=-1:
+                #-1 means player click other place to close the list
                     if self.UpgradeDecision(event,self.currentTower)==1:
-                        
+                    #1 means delete the tower
                         self.deleteBuild(self.dictTowerIndex[self.tulCurrentPoint])
+                        #delete the record of target tower in index dictionary and type dictionary
                         self.dictTowerIndex.pop(self.tulCurrentPoint)
                         self.dictTowerType.pop(self.tulCurrentPoint)
                         self.myGameMap.DeleteTower(self.nMapNumber, self.tulCurrentPoint)
+                        # when player delete the tower, a blank box can instead the old one
                         self.myObjManger.CreateTowerNode((0, 0, 0), (self.tulCurrentPoint[0]*64,self.tulCurrentPoint[1]*64),(64,64),0)
                         self.nMoney += 50
                     elif self.UpgradeDecision(event,self.currentTower)==2:
+                    #2 means upgrade
                         if self.nMoney >= 100:
+                            #get the instance of tower by position ()and update
                             self.myObjManger.dictObject[self.dictTowerIndex[self.tulCurrentPoint]].SetType(self.typeUpgrade[self.dictTowerType[self.tulCurrentPoint]])
                             self.nMoney = self.nMoney -100
                         else:
                             if self.SoundGold.soundState():
                                 self.SoundGold.play(1)
+                #finish the operation clean and the operation cache
                 self.DeleteIndex()
-
+    # mouse movement
     def MouseMotion(self,event):
         
         if self.GameOver():
@@ -231,7 +247,7 @@ class CStageGame(CStage):
                     self.myObjManger.dictObject[self.nOKIndex].SetImage("picture/OKButton1.png")
             
 
-    ##build tower
+    #build tower list
     def Build(self,event):
 
         ntower1=self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
@@ -240,7 +256,8 @@ class CStageGame(CStage):
                                                                        (64,64),2)
         self.AddNewIndex(ntower1)
         self.AddNewIndex(ntower2)
-
+        
+    #judge the player choice for build tower -1 means click other place
     def BuildDecision(self, event, tower):
         
         for n in range(len(tower)):
@@ -248,15 +265,24 @@ class CStageGame(CStage):
                 
                 return n
         return -1
+    #judge the player choice for upgrade or delete tower 1 means delete
+    def UpgradeDecision(self,event,tower):
+        if tower[0].OnButton(event) :
+            return 1
+        elif tower[1].OnButton(event):
+            return 2
+        return -1
 
+    
+    # delete every the tower object of the list
     def unBuild(self):
         for n in self.currentIndex:
             self.myObjManger.DeleteObjectNode(n)
-            
+    #delete the object from objectmanage
     def deleteBuild(self,index):
         self.myObjManger.DeleteObjectNode(index)
 
-    ##update tower
+    #update tower
     def Upgrade(self,event):
         self.AddNewIndex(self.myObjManger.CreateTowerNode((0, 0, 0), (self.GetPointLeft(event.pos),self.GetPointTop(event.pos)),
                                                            (64,64),-1))
@@ -268,7 +294,7 @@ class CStageGame(CStage):
         self.currentIndex = self.currentIndex + [index]
 
         self.currentTower = self.currentTower + [self.myObjManger.GetObject(index)]
-    
+    #delete the list cache list
     def DeleteIndex(self):
         self.currentIndex=[]
         self.currentTower=[]
@@ -288,18 +314,11 @@ class CStageGame(CStage):
         return tulTop
 
 
-    ## after build or upgrade 
+    ## after build or upgrade, update the index and type dictionary in stagegame
     def AddIndex(self,index,buildtype,position):
         self.dictTowerIndex[position]=index
         self.dictTowerType[position]=buildtype
 
-
-    def UpgradeDecision(self,event,tower):
-        if tower[0].OnButton(event) :
-            return 1
-        elif tower[1].OnButton(event):
-            return 2
-        return -1
 
 ## finish to build or update
 
