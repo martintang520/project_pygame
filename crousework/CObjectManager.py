@@ -14,18 +14,21 @@ class CObjectManager():
         self.dictObject = {}
         self.index = 0
 
+    ## update all object
     def UpdateList(self, deltaTime):
         if len(self.dictObject) > 0:
             for key in self.dictObject:
                 self.dictObject[key].Update(deltaTime)
                 
-
+    ## render all object
     def RenderList(self, deltaTime, surface):
         if len(self.dictObject) > 0:
             for key in self.dictObject:
                 self.dictObject[key].Render(deltaTime, surface)
         
-
+    ## push a object node into object dictionary
+    ## For each kind of object subclass should have different creat node meathod
+    ## to guarantee override function and additional function can be called
     def CreateObjectNode(self, color, pos, size, pirtureName):
         newObject = CObject(color, pos, size, pirtureName)
         self.dictObject[self.index] = newObject
@@ -80,6 +83,7 @@ class CObjectManager():
 
         return self.index - 1
 
+    ## delect the node in dictionary
     def DeleteObjectNode(self, index):
 
         if self.dictObject.has_key(index):

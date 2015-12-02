@@ -23,7 +23,6 @@ class CMonster(CObject):
         self.nOrder = 0
         self.DataInit(monsterProperty)
 
-        #####
         self.nStepsPerTile = 4. ## How many step walking though a tile 
         self.nFrames = 4.  ## numbers of frames
         self.fTimePerFrame = self.nSpeed / self.nStepsPerTile / self.nFrames
@@ -36,10 +35,9 @@ class CMonster(CObject):
         
         self.bWalking = False
         self.tupCurrentPos = self.PosConvert(initialPos)
-        self.tupTaretPos = self.tupCurrentPos
+        self.tupTargetPos = self.tupCurrentPos
         self.tupVelocity = (0, 0)
 
-        #####
         self.tupNext = (0,0)
         self.bchangeDirection = False ##Change Frame picture
 
@@ -48,8 +46,7 @@ class CMonster(CObject):
 
 
     def DataInit(self, monsterProperty):
-        ##self.image = pygame.image.load(monsterProperty.strPictureName, 
-        ##                               ).convert_alpha()
+        
         self.LoadImage(monsterProperty.strPictureName, 64, 8)
         self.image = self.images[self.nOrder]
         
@@ -66,6 +63,7 @@ class CMonster(CObject):
             self.Next()
             return
 
+        ## move and walking animation
         self.fSinceLastFrame += deltaTime
         if self.fSinceLastFrame >= self.fTimePerFrame * (
             self.nCurrentStep * self.nFrames + self.nCurrentFrame):
@@ -82,7 +80,7 @@ class CMonster(CObject):
                 self.nCurrentStep += 1
                 self.nCurrentFrame = 0
             if self.nCurrentStep >= self.nStepsPerTile:
-                self.tupCurrentPos = self.tupTaretPos
+                self.tupCurrentPos = self.tupTargetPos
                 self.bWalking = False
             
 
@@ -94,29 +92,33 @@ class CMonster(CObject):
         return (pos[0] // 64, pos[1] // 64)
 
 
+    ## monster walk to one adjacent cell
     def WalkTo(self, row, col):
+        ## cannot move more than one cell one time
         if (abs(row - self.tupCurrentPos[1]) + abs(
             col - self.tupCurrentPos[0]) > 1):
             return
-        
+
+        ## get vector from current position to target
         if self.tupCurrentPos[0] != col or self.tupCurrentPos[1] != row:
             self.bWalking = True
-            self.tupTaretPos = (col, row)
+            self.tupTargetPos = (col, row)
 
             self.fSinceLastFrame = 0
 	    self.nCurrentFrame = 0
 	    self.nCurrentStep = 0
 
-	    x1 = ((self.tupTaretPos[0] - self.tupCurrentPos[0])
+	    x1 = ((self.tupTargetPos[0] - self.tupCurrentPos[0])
                   * self.tupTileSize[0] / self.nStepsPerTile / self.nFrames)
-	    y1 = ((self.tupTaretPos[1] - self.tupCurrentPos[1])
+	    y1 = ((self.tupTargetPos[1] - self.tupCurrentPos[1])
                   * self.tupTileSize[1] / self.nStepsPerTile / self.nFrames)
 	    self.tupVelocity = (x1, y1)
 
-
+    ## only path can be pass
     def CanPass(self, pos):
         if self.listMap[pos[1]][pos[0]] == 1:
             return True
+        ## reach Eiffel Tower
         elif self.listMap[pos[1]][pos[0]] == 5:
             self.bSuicideAttack = True
         else:
@@ -124,7 +126,7 @@ class CMonster(CObject):
         
     
     def Next(self):
-
+        ## change the map number as the path have been passed
         self.listMap[self.tupCurrentPos[1]][self.tupCurrentPos[0]] = -1
         for i in range(4):
             if (self.tupCurrentPos[0] + CMonster.Direction[i][0] >= 0 and
