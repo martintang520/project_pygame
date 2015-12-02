@@ -104,4 +104,5 @@ class CObjectManager():
 
 
     def ClearObjectDict(self):
+        self.dictObject.clear()
         pass
