@@ -36,7 +36,8 @@ class music:
               track = pygame.mixer.music.load(strmusicname)
               pygame.mixer.music.set_volume(0.5)
               self.State = False
-              self.c=100
+              self.nVolumn=100
+              
        #function play music#
        def play(self,ntimes):
               if ntimes == 0:
@@ -62,7 +63,7 @@ class music:
               return self.State
        #return music volumn#
        def musicVolumn(self):
-              return self.nvolumn
+              return self.nVolumn
 
 
 
