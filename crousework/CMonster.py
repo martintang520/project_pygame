@@ -44,6 +44,11 @@ class CMonster(CObject):
         ## suicide attack
         self.bSuicideAttack = False
 
+        ## decelerated effect
+        self.bDeceleration = False
+        self.fDecelerationTime = 0
+        self.fNormalSpeed = 0
+
 
     def DataInit(self, monsterProperty):
         
@@ -82,6 +87,15 @@ class CMonster(CObject):
             if self.nCurrentStep >= self.nStepsPerTile:
                 self.tupCurrentPos = self.tupTargetPos
                 self.bWalking = False
+
+        ## Deceleration effect
+        if self.bDeceleration:
+            self.fDecelerationTime += deltaTime
+
+            if self.fDecelerationTime >= 3:
+                self.bDeceleration = False
+                self.fDecelerationTime = 0
+                self.fTimePerFrame = self.fNormalSpeed
             
 
     def Render(self, deltaTime, surface):
@@ -153,4 +167,10 @@ class CMonster(CObject):
 
         self.images = [myImage.subsurface(Rect((i * width, 0), (width, height))
                     ) for i in range(number)]
+
+    def Decelerating(self):
+        self.bDeceleration = True
+        self.fDecelerationTime = 0
+        self.fNormalSpeed = self.fTimePerFrame
+        self.fTimePerFrame = self.fTimePerFrame * 2
             

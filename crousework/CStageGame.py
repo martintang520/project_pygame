@@ -11,6 +11,7 @@ class CStageGame(CStage):
         self.surface = surface
         self.myGameMap = CMap()
         self.myObjManger = CObjectManager()
+        self.font = pygame.font.SysFont("Arial",20)  ## Font
 
         self.boolIsBuild=True
 
@@ -83,6 +84,10 @@ class CStageGame(CStage):
     
     def Render(self, deltaTime):
         self.myObjManger.RenderList(deltaTime, self.surface)
+        self.surface.blit(self.font.render("Money : {} ".format(int(self.nMoney)),1,
+                                               pygame.color.THECOLORS["white"]),(100, 0))
+        self.surface.blit(self.font.render("Life : {} ".format(int(self.nLife)),1,
+                                               pygame.color.THECOLORS["white"]),(230, 0))
 
         
     def DrawMap(self):
@@ -345,7 +350,11 @@ class CStageGame(CStage):
             self.myObjManger.dictObject[towerIndex].tulPos, (64, 64), "picture/bullet.png")
         self.dictBulletindex[newBullet] = (monsterIndex, towerIndex)
         self.myObjManger.dictObject[newBullet].nAttackPoint = self.myObjManger.dictObject[towerIndex].nAttackPoint
-        print self.myObjManger.dictObject[newBullet].nAttackPoint
+
+        #decelerated attack
+        towerType = self.myObjManger.dictObject[towerIndex].nTowerType
+        if towerType == 2 or towerType == 5:
+            self.myObjManger.dictObject[newBullet].nAttackType = 1 
 
     def bulletMovement(self,deltaTime):
         
@@ -366,6 +375,11 @@ class CStageGame(CStage):
                 if self.myObjManger.HaveKey(self.dictBulletindex[bullet][0]):
                     self.myObjManger.dictObject[(self.dictBulletindex[bullet][0]
                         )].nHP -= (self.myObjManger.dictObject[bullet].nAttackPoint)
+
+                    ##Deceleration
+                    if self.myObjManger.dictObject[bullet].nAttackType == 1:
+                        self.myObjManger.dictObject[self.dictBulletindex[bullet][0]].Decelerating()
+                    
                 key = bullet
                 break
 
@@ -382,6 +396,7 @@ class CStageGame(CStage):
             if self.myObjManger.dictObject[monster].nHP <=0:
                 if self.SoundDeath.soundState():
                             self.SoundDeath.play(1)
+                self.nMoney += 20
                 key = monster
                 break
 
