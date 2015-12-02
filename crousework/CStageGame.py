@@ -46,10 +46,15 @@ class CStageGame(CStage):
         self.listMonsterIndex = []
         self.listExplosionIndex = []
         self.dictBulletindex = {} ## bullet list
-        self.listCreatMonster = [(0, 5, 5), (0, 3, 3), (1, 3, 5), (0, 0, 0)]
-        self.dictMonsterType = {0:StuProperty(1, 20, 1.5, "picture/monster1.png",
+        self.listCreatMonster = [(0, 5, 5), (0, 3, 1), (1, 3, 5), (1, 6, 5),
+                                 (0, 2, 1), (1, 2, 2), (2, 2, 5), (1, 4, 1),
+                                 (2, 3, 5), (0, 5, 1), (2, 5, 5), (1, 7, 2),
+                                 (2, 7, 5), (0, 0, 0)]
+        self.dictMonsterType = {0:StuProperty(1, 30, 1.5, "picture/monster1.png",
                                             (0,1), self.listMap),
-                                1:StuProperty(2, 20, 1., "picture/monster2.png",
+                                1:StuProperty(2, 30, 1., "picture/monster2.png",
+                                            (0,1), self.listMap),
+                                2:StuProperty(2, 50, 1.5, "picture/monster3.png",
                                             (0,1), self.listMap)}
 
         ## game over
