@@ -4,7 +4,7 @@ from CObjectAnimation import *
 
 class CExplosion(CObjectAnimation):
 
-
+	#Use for Explosion Animation,inherit Animation class#
     def __init__(self, color, initialPos, size, pictureName, width, farmeNumber,
                  playSpeed = 0.2, loop = False):
 
